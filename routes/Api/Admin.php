@@ -19,6 +19,10 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
             Route::post('{teacherRegistration}/confirm', [TeacherRegistrationController::class, 'confirm'])
                 ->middleware('can:confirm,teacherRegistration')
                 ->name('confirm');
+            Route::post('{teacherRegistration}/deny', [TeacherRegistrationController::class, 'deny'])
+                ->middleware('can:deny,teacherRegistration')
+                ->name('deny');
+            Route::get('/', [TeacherRegistrationController::class, 'show'])->name('show');
         });
     });
 });

@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
+use App\Traits\BaseScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -16,7 +17,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, BaseScope;
 
     /**
      * The attributes that are mass assignable.

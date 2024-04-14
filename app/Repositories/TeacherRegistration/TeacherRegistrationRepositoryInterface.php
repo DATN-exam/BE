@@ -9,4 +9,6 @@ use App\Repositories\RepositoryInterface;
 interface TeacherRegistrationRepositoryInterface extends RepositoryInterface
 {
     public function checkHasBeenRegistration($userId);
+
+    public function paginate($filters);
 }
