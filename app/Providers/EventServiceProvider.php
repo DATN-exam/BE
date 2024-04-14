@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\Admin\Teacher\CofirmRegistrationEvent as AdminCofirmRegistrationEvent;
 use App\Events\Site\UserRegisterEvent;
+use App\Listeners\Admin\Teacher\CofirmRegistrationListener as AdminCofirmRegistrationListener;
 use App\Listeners\Site\UserRegisterListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,6 +24,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRegisterEvent::class => [
             UserRegisterListener::class,
+        ],
+
+        AdminCofirmRegistrationEvent::class => [
+            AdminCofirmRegistrationListener::class,
         ],
     ];
 

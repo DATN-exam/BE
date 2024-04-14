@@ -5,7 +5,7 @@ namespace App\Listeners\Site;
 use App\Events\Site\UserRegister;
 use App\Events\Site\UserRegisterEvent;
 use App\Mail\Site\UserRegisterMail;
-use App\Notifications\Site\UserRegisteNotification;
+use App\Notifications\Student\UserRegisteNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Queue\InteractsWithQueue;

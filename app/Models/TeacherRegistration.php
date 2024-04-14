@@ -32,4 +32,9 @@ class TeacherRegistration extends Model
     {
         return $this->belongsTo(User::class, 'employee_cofirm_id', 'id');
     }
+
+    public function canCofirm(): bool
+    {
+        return $this->status === TeacherRegistrationStatus::WAIT;
+    }
 }

@@ -34,7 +34,7 @@ class User extends Authenticatable implements JWTSubject
         'ward_id',
         'address',
         'avatar',
-        'descripton',
+        'description',
         'token_verify'
     ];
 
@@ -80,6 +80,16 @@ class User extends Authenticatable implements JWTSubject
     public function isAdmin()
     {
         return $this->role === UserRole::ADMIN;
+    }
+
+    public function isTeacher()
+    {
+        return $this->role === UserRole::TEACHER;
+    }
+
+    public function isStudent()
+    {
+        return $this->role === UserRole::STUDENT;
     }
 
     public function teacherRegistrations(): HasMany

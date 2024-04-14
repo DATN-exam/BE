@@ -33,7 +33,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'dob' => fake()->dateTimeBetween('-50 years', '-18 years'),
             'address' => fake()->address(),
-            'descripton' => fake()->text(150),
+            'description' => fake()->text(150),
             'password' => static::$password ??= Hash::make('password'),
         ];
     }

@@ -47,7 +47,7 @@ class AuthController extends BaseApiController
     {
         try {
             $user = $this->authSer->profile();
-            return $this->sendResponse([UserResource::make($user)]);
+            return $this->sendResponse(UserResource::make($user));
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
@@ -58,7 +58,7 @@ class AuthController extends BaseApiController
     {
         try {
             $user = $this->authSer->setRequest($rq)->register();
-            return $this->sendResponse([UserResource::make($user)]);
+            return $this->sendResponse(UserResource::make($user));
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);

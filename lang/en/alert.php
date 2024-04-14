@@ -23,6 +23,29 @@ return [
         'logout' => [
             'success' => 'Logout successful'
         ]
-    ]
-
+    ],
+    'teacher' => [
+        'register' => [
+            'has_been' => 'Has been registered'
+        ]
+    ],
+    'bad_request' => 'Bad request',
+    'server_error' => 'Server error',
+    'not_found' => 'Not found',
+    'forbidden' => 'Unauthenticated.',
+    'update_successful' => 'Update successful',
+    'import_successful' => 'Import successful',
+    'moto' => [
+        'images' => [
+            'max' => 'Quantity image than maximum(' . config('define.images.moto.max') . ')',
+        ],
+        'rent' => [
+            'failed' => 'Reset password failed',
+            'has_been_scheduled' => 'Motos has been scheduled.'
+        ]
+    ],
+    'params' => [
+        'invalid' => 'There are some invalid params'
+    ],
+    'order_issue' => 'Have :quantity order issues',
 ];

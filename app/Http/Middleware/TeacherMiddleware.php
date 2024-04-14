@@ -2,12 +2,11 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class TeacherMiddleware
 {
     /**
      * Handle an incoming request.
@@ -20,7 +19,7 @@ class AdminMiddleware
          * @var User $user
          */
         $user = auth('api')->user();
-        if (!$user->isAdmin()) {
+        if (!$user->isTeacher()) {
             return response()->json(["message" => __('alert.forbidden')], Response::HTTP_FORBIDDEN);
         }
         return $next($request);

@@ -25,7 +25,7 @@ class UserResource extends JsonResource
             'ward_id' => $this->ward_id,
             'address' => $this->address,
             'avatar' => $this->avatar,
-            'descripton' => $this->descripton,
+            'description' => $this->description,
         ];
     }
 }

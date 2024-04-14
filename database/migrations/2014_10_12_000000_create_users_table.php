@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('dob')->nullable();
             $table->string('ward_id')->nullable();
             $table->string('address')->nullable();
-            $table->string('descripton')->nullable();
+            $table->string('description')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();

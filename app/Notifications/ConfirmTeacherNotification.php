@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Notifications\Site;
+namespace App\Notifications;
 
+use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
+use App\Models\TeacherRegistration;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\Log;
 
-class UserRegisteNotification extends Notification implements ShouldQueue
+class ConfirmTeacherNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct(protected $linkVerify)
+    public function __construct(protected TeacherRegistration $registration)
     {
         //
     }
@@ -35,11 +33,22 @@ class UserRegisteNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        if ($this->registration->status === TeacherRegistrationStatus::DENY) {
+            return $this->mailDeny();
+        };
+        return $this->mailAccept();
+    }
+
+    private function mailAccept()
+    {
         return (new MailMessage)
-            ->line('You just created an account')
-            ->line('Please verify by clicking on the following link')
-            ->action('Verify', $this->linkVerify)
-            ->line('Thank you!');
+            ->line('accept');
+    }
+
+    private function mailDeny()
+    {
+        return (new MailMessage)
+            ->line('deny');
     }
 
     /**

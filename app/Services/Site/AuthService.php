@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-use function PHPUnit\Framework\isEmpty;
-
 class AuthService extends BaseService
 {
     public function __construct(protected UserRepositoryInterface $userRepo)
