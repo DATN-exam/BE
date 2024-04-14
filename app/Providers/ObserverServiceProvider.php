@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use App\Models\User;
+use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider
+class ObserverServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
@@ -21,8 +21,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        DB::listen(function ($query) {
-            Log::info("SQL Query: {$query->sql} - Parameters: " . json_encode($query->bindings));
-        });
+        User::observe(UserObserver::class);
     }
 }
