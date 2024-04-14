@@ -32,12 +32,36 @@ class RegistrationService extends BaseService
             $this->userRepo->update($teacherRegistration->user_id, [
                 'role' => UserRole::TEACHER
             ]);
+            $teacherRegistration->refresh();
             event(new CofirmRegistrationEvent($teacherRegistration));
             DB::commit();
             return;
         } catch (Throwable $e) {
-            throw $e;
             DB::rollBack();
+            throw $e;
         }
+    }
+
+    public function denyRegistration(TeacherRegistration $teacherRegistration)
+    {
+        DB::beginTransaction();
+        try {
+            $this->registrationRepo->update($teacherRegistration->id, [
+                'status' => TeacherRegistrationStatus::DENY,
+                'employee_cofirm_id' => auth('api')->user()->id,
+            ]);
+            $teacherRegistration->refresh();
+            event(new CofirmRegistrationEvent($teacherRegistration));
+            DB::commit();
+            return;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    public function paginate($filters)
+    {
+        return $this->registrationRepo->paginate($filters);
     }
 }

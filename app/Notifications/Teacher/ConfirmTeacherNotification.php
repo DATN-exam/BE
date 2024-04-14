@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Teacher;
 
 use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
 use App\Models\TeacherRegistration;

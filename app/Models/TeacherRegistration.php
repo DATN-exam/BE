@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
+use App\Traits\BaseScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TeacherRegistration extends Model
 {
-    use HasFactory;
+    use HasFactory, BaseScope;
 
     protected $fillable = [
         'user_id',
