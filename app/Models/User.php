@@ -28,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'google_id',
         'password',
+        'status',
         'role',
         'first_name',
         'last_name',
@@ -96,5 +97,10 @@ class User extends Authenticatable implements JWTSubject
     public function teacherRegistrations(): HasMany
     {
         return $this->hasMany(TeacherRegistration::class, 'user_id', 'id');
+    }
+
+    public function isBocked()
+    {
+        return $this->status !== UserStatus::ACTIVE;
     }
 }

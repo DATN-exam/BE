@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('teacher_registrations', function (Blueprint $table) {
             $table->increments('id');;
             $table->unsignedInteger('user_id');
-            $table->enum('status', TeacherRegistrationStatus::getValues())->default(TeacherRegistrationStatus::WAIT);
+            $table->unsignedSmallInteger('status')->default(1);
             $table->text('description');
             $table->unsignedInteger('employee_cofirm_id')->nullable();
             $table->text('reason')->nullable();

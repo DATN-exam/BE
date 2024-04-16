@@ -4,12 +4,12 @@ namespace App\Enums\TeacherRegistration;
 
 use App\Traits\EnumToArray;
 
-enum TeacherRegistrationStatus: string
+enum TeacherRegistrationStatus: int
 {
     use EnumToArray;
 
-    case WAIT = 'wait';
-    case ACCEPT = 'accept';
-    case DENY = 'deny';
-    case CANCEL = 'cancel';
+    case WAIT = 1;
+    case ACCEPT = 2;
+    case DENY = 3;
+    case CANCEL = 4;
 }

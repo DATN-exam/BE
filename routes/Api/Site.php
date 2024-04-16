@@ -10,6 +10,11 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::get('verify', [AuthController::class, 'verify'])->name('verify')
         ->withoutMiddleware('api');
     Route::post('cofirmRegister', [AuthController::class, 'cofirmRegister'])->name('cofirmRegister');
+
+    Route::group(['prefix' => 'google', 'as' => 'google.'], function () {
+        Route::get('url', [AuthController::class, 'getLoginGoogleUrl'])->name('url');
+        Route::get('callback', [AuthController::class, 'loginGoogleCallback'])->name('loginGoogleCallback');
+    });
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'auth', 'as' => 'auth.'], function () {
