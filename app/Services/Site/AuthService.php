@@ -28,6 +28,15 @@ class AuthService extends BaseService
         return $this->respondWithToken($token);
     }
 
+    public function loginWithgoogle($user)
+    {
+        if (!$token = auth('api')->login($user)) {
+            throw new \Exception(__('alert.auth.login.failed'));
+        }
+        $this->checkStatus(auth('api')->user()->status);
+        return $this->respondWithToken($token);
+    }
+
     public function logout(): void
     {
         auth('api')->logout();
@@ -85,16 +94,23 @@ class AuthService extends BaseService
         return $token;
     }
 
-    public function verify($rq)
+    public function handleVerify($rq)
     {
-
-        $this->checkVerifyToken($rq['token']);
+        $user = $this->checkVerifyToken($rq['token']);
+        if ($user) {
+            return $this->verify($user);
+        }
+        return;
     }
 
     private function checkVerifyToken($token)
     {
         $decode =  JWTAuth::getJWTProvider()->decode($token);
-        $user = $this->userRepo->findUserVerify($decode['token'], $decode['user_id']);
+        return $this->userRepo->findUserVerify($decode['token'], $decode['user_id']);
+    }
+
+    public function verify(User $user)
+    {
         $this->userRepo->update($user->id, [
             'status' => UserStatus::ACTIVE,
             'token_verify' => null,

@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');;
             $table->string('google_id')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
             $table->string('email')->unique();
-            $table->enum('status', UserStatus::getValues())->default(UserStatus::WAIT_VERIFY);
-            $table->enum('role', UserRole::getValues())->default(UserRole::STUDENT);
+            $table->unsignedSmallInteger('status')->default(1);
+            $table->unsignedSmallInteger('role')->default(1);
             $table->string('first_name');
             $table->string('last_name');
             $table->date('dob')->nullable();

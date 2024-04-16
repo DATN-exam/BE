@@ -8,4 +8,6 @@ use App\Repositories\RepositoryInterface;
 interface UserRepositoryInterface extends RepositoryInterface
 {
     public function findUserVerify($token,$userId);
+
+    public function checkUserExists($email);
 }

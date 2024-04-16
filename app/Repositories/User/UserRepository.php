@@ -21,4 +21,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->where('status', UserStatus::WAIT_VERIFY)
             ->first();
     }
+
+    public function checkUserExists($email)
+    {
+        return $this->model
+            ->where('email', $email)
+            ->first();
+    }
 }

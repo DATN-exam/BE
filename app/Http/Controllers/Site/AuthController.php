@@ -7,15 +7,19 @@ use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
 use App\Http\Resources\Site\UserResource;
 use App\Services\Site\AuthService;
+use App\Services\Site\GoogleAuthService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Laravel\Socialite\Facades\Socialite;
 use Throwable;
 
 class AuthController extends BaseApiController
 {
-    public function __construct(protected AuthService $authSer)
-    {
+    public function __construct(
+        protected AuthService $authSer,
+        protected GoogleAuthService $googleAuthSer
+    ) {
         //
     }
 
@@ -68,11 +72,33 @@ class AuthController extends BaseApiController
     public function verify(Request $rq)
     {
         try {
-            $this->authSer->verify($rq->all());
+            $this->authSer->handleVerify($rq->all());
             return 1;
         } catch (Throwable $e) {
             Log::error($e);
-            dd(3);
+            return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function getLoginGoogleUrl()
+    {
+        try {
+            $data = $this->googleAuthSer->getUrlLogin();
+            return $this->sendResponse([
+                'url' => $data,
+            ]);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function loginGoogleCallback(Request $rq)
+    {
+        try {
+            $data = $this->googleAuthSer->loginCallback();
+            return $this->sendResponse($data);
+        } catch (Throwable $e) {
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
         }
     }
