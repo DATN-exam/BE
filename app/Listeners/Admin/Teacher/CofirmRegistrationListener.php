@@ -2,7 +2,7 @@
 
 namespace App\Listeners\Admin\Teacher;
 
-use App\Notifications\ConfirmTeacherNotification;
+use App\Notifications\Teacher\ConfirmTeacherNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;

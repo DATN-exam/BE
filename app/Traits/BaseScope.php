@@ -11,23 +11,23 @@ trait BaseScope
     //     return $query->where($this->getTable() . '.status', $status);
     // }
 
-    // public function scopeModelSort(Builder $query, $sortParamsString)
-    // {
-    //     $this->detachSortParams($sortParamsString)->each(function ($item) use ($query) {
-    //         $query = $query->orderBy($item['sortColumn'], $item['sortType'] ?: 'ASC');
-    //     });
-    //     return $query;
-    // }
+    public function scopeModelSort(Builder $query, $sortParamsString)
+    {
+        $this->detachSortParams($sortParamsString)->each(function ($item) use ($query) {
+            $query = $query->orderBy($item['sortColumn'], $item['sortType'] ?: 'ASC');
+        });
+        return $query;
+    }
 
-    // private function detachSortParams($sortParamsString)
-    // {
-    //     $sortParams = explode(',', $sortParamsString);
-    //     return collect($sortParams)->map(function ($sortParam) {
-    //         [$sortColumn, $sortType] = explode('.', $sortParam . '.');
-    //         return [
-    //             'sortColumn' => $sortColumn,
-    //             'sortType' => $sortType,
-    //         ];
-    //     });
-    // }
+    private function detachSortParams($sortParamsString)
+    {
+        $sortParams = explode(',', $sortParamsString);
+        return collect($sortParams)->map(function ($sortParam) {
+            [$sortColumn, $sortType] = explode('.', $sortParam . '.');
+            return [
+                'sortColumn' => $sortColumn,
+                'sortType' => $sortType,
+            ];
+        });
+    }
 }

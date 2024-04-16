@@ -3,9 +3,7 @@
 namespace App\Repositories\TeacherRegistration;
 
 use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
-use App\Enums\User\UserStatus;
 use App\Models\TeacherRegistration;
-use App\Models\User;
 use App\Repositories\BaseRepository;
 
 class TeacherRegistrationRepository extends BaseRepository implements TeacherRegistrationRepositoryInterface
@@ -23,5 +21,33 @@ class TeacherRegistrationRepository extends BaseRepository implements TeacherReg
                 TeacherRegistrationStatus::ACCEPT, TeacherRegistrationStatus::WAIT
             ])
             ->exists();
+    }
+
+    private function baseList($filters)
+    {
+        return $this->model
+            ->when(isset($filters['username']), function ($query) use ($filters) {
+                return $query->whereHas('user', function ($query) use ($filters) {
+                    return $query->where('users.first_name', 'like', $filters['username'] . '%')
+                        ->orWhere('users.last_name', 'like', $filters['username'] . '%');
+                });
+            })
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                return $query->where(
+                    'status',
+                    TeacherRegistrationStatus::getValueByKey($filters['status'])
+                );
+            })
+            ->when(isset($filters['sort']), function ($query) use ($filters) {
+                return $query->modelSort($filters['sort']);
+            })
+            ->with(['user','employeeCofirm']);
+    }
+
+    public function paginate($filters)
+    {
+        $VALUE_DEFAULT_PER_PAGE = 10;
+        return $this->baseList($filters)
+            ->paginate($filters['per_page'] ?? $VALUE_DEFAULT_PER_PAGE);
     }
 }

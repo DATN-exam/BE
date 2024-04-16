@@ -2,6 +2,8 @@
 
 namespace App\Traits;
 
+use Illuminate\Support\Str;
+
 trait EnumToArray
 {
     public static function getKeys(): array
@@ -17,5 +19,11 @@ trait EnumToArray
     public static function toArray(): array
     {
         return array_combine(self::getKeys(), self::getValues());
+    }
+
+    public static function getValueByKey($key)
+    {
+        $array = self::toArray();
+        return $array[Str::upper($key)] ?? null;
     }
 }

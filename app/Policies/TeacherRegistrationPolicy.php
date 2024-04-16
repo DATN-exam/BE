@@ -12,4 +12,9 @@ class TeacherRegistrationPolicy
     {
         return $teacherRegistration->canCofirm();
     }
+
+    public function deny(User $user, TeacherRegistration $teacherRegistration)
+    {
+        return $teacherRegistration->canCofirm();
+    }
 }
