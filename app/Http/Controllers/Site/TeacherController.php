@@ -20,7 +20,7 @@ class TeacherController extends BaseApiController
     public function register(RegisterRequest $rq)
     {
         try {
-            $registration = $this->teacherSer->setRequest($rq)->register();
+            $registration = $this->teacherSer->setRequestValidated($rq)->register();
             return $this->sendResponse(TeacherRegistrationResource::make($registration));
         } catch (\Exception $e) {
             return $this->sendError($e->getMessage(), Response::HTTP_BAD_REQUEST);

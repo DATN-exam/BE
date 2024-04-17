@@ -78,7 +78,8 @@ class AuthService extends BaseService
         $tokenVerify = Str::random(40);
         $dataCreate = [...$this->data, 'token_verify' => $tokenVerify];
         $user = $this->userRepo->create($dataCreate);
-        $linkVerify = route('auth.verify', ['token' => $this->createVerifyToken($user)]);
+        // $linkVerify = route('auth.verify', ['token' => $this->createVerifyToken($user)]);
+        $linkVerify = config('define.url_verify') . "?token=" . $this->createVerifyToken($user);
         event(new UserRegisterEvent($user, $linkVerify));
         return $user;
     }

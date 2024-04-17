@@ -3,15 +3,24 @@
 namespace App\Services;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 abstract class BaseService
 {
     protected $data;
 
-    public function setRequest(FormRequest $request)
+    public function setRequestValidated(FormRequest $request)
     {
         $this->data = $request->validated();
+        return $this;
+    }
+
+    public function setRequest(Request $rq)
+    {
+        $this->data = collect($rq->all())->filter(function ($item) {
+            return !empty($item);
+        })->toArray();
         return $this;
     }
 }
