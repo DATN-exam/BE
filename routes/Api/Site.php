@@ -7,9 +7,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [AuthController::class, 'register'])->name('register');
-    Route::get('verify', [AuthController::class, 'verify'])->name('verify')
+    Route::post('verify', [AuthController::class, 'verify'])->name('verify')
         ->withoutMiddleware('api');
-    Route::post('cofirmRegister', [AuthController::class, 'cofirmRegister'])->name('cofirmRegister');
 
     Route::group(['prefix' => 'google', 'as' => 'google.'], function () {
         Route::get('url', [AuthController::class, 'getLoginGoogleUrl'])->name('url');
@@ -22,7 +21,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'auth', 'as' => 'auth.'], 
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
 });
 
-Route::group(['middleware' => ['auth:api', 'teacher'], 'prefix' => 'teacher', 'as' => 'teacher.'], function () {
+Route::group(['middleware' => ['auth:api', 'teacher'], 'prefix' => 'teachers', 'as' => 'teachers.'], function () {
     Route::post('register', [TeacherController::class, 'register'])->name('register')
         ->withoutMiddleware(['teacher']);
 });

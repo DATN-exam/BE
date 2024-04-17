@@ -2,7 +2,11 @@
 
 namespace App\Providers;
 
+use App\Enums\User\UserRole;
+use App\Enums\User\UserStatus;
+use App\Models\User;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
 class ModelBindingServiceProvider extends ServiceProvider
 {
@@ -19,16 +23,12 @@ class ModelBindingServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Route::bind('onlyUser', function ($value) {
-        //     return User::role([UserRole::USER])->findOrFail($value);
-        // });
+        Route::bind('student', function ($value) {
+            return User::role(UserRole::STUDENT)->findOrFail($value);
+        });
 
-        // Route::bind('motoReadyRent', function ($value) {
-        //     return Moto::readyRent()->findOrFail($value);
-        // });
-
-        // Route::bind('orderApprove', function ($value) {
-        //     return Order::status(OrderStatus::APPROVE)->findOrFail($value);
-        // });
+        Route::bind('teacher', function ($value) {
+            return User::role(UserRole::TEACHER)->findOrFail($value);
+        });
     }
 }

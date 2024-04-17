@@ -10,4 +10,8 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function findUserVerify($token,$userId);
 
     public function checkUserExists($email);
+
+    public function paginateStudent($filters);
+
+    public function paginateTeacher($filters);
 }

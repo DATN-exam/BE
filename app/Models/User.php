@@ -103,4 +103,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->status !== UserStatus::ACTIVE;
     }
+
+    protected function scopeRole($query, $role)
+    {
+        return $query->where('role', $role);
+    }
 }

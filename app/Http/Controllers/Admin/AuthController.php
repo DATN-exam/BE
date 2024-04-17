@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Admin\Auth\LoginRequest;
-use App\Http\Resources\Admin\UserResource;
+use App\Http\Resources\Admin\StudentResource;
 use App\Services\Admin\AuthService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -20,7 +20,7 @@ class AuthController extends BaseApiController
     public function login(LoginRequest $rq)
     {
         try {
-            $data = $this->authSer->setRequest($rq)->login();
+            $data = $this->authSer->setRequestValidated($rq)->login();
             return $this->sendResponse($data);
         } catch (Throwable $e) {
             Log::error($e);
@@ -45,7 +45,7 @@ class AuthController extends BaseApiController
     {
         try {
             $user = $this->authSer->profile();
-            return $this->sendResponse(UserResource::make($user));
+            return $this->sendResponse(StudentResource::make($user));
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
