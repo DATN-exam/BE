@@ -31,7 +31,7 @@ class StudentService extends BaseService
     {
         DB::beginTransaction();
         try {
-            $this->userRepo->update($student->id, [
+            $this->userRepo->update($student, [
                 'status' => UserStatus::ADMIN_BLOCK
             ]);
             //Send mail block to user
@@ -47,7 +47,7 @@ class StudentService extends BaseService
     {
         DB::beginTransaction();
         try {
-            $this->userRepo->update($student->id, [
+            $this->userRepo->update($student, [
                 'status' => UserStatus::ACTIVE
             ]);
             //Send mail active to user

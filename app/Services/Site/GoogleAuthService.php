@@ -53,7 +53,7 @@ class GoogleAuthService extends BaseService
         }
 
         if (!empty($dataUpdate)) {
-            $this->userRepo->update($user->id, $dataUpdate);
+            $this->userRepo->update($user, $dataUpdate);
         }
         return $user;
     }

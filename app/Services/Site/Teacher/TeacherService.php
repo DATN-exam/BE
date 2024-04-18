@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Site;
+namespace App\Services\Site\Teacher;
 
 use App\Events\Site\Teacher\TeacherRegisterEvent;
 use App\Models\User;

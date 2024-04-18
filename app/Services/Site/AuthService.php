@@ -101,7 +101,7 @@ class AuthService extends BaseService
         if ($user) {
             return $this->verify($user);
         }
-        return;
+        throw new \Exception();
     }
 
     private function checkVerifyToken($token)
@@ -112,7 +112,7 @@ class AuthService extends BaseService
 
     public function verify(User $user)
     {
-        $this->userRepo->update($user->id, [
+        $this->userRepo->update($user, [
             'status' => UserStatus::ACTIVE,
             'token_verify' => null,
         ]);

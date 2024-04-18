@@ -19,7 +19,7 @@ abstract class BaseService
     public function setRequest(Request $rq)
     {
         $this->data = collect($rq->all())->filter(function ($item) {
-            return !empty($item);
+            return $item !== null && $item !== '';
         })->toArray();
         return $this;
     }

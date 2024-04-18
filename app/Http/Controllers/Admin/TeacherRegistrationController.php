@@ -35,7 +35,7 @@ class TeacherRegistrationController extends BaseApiController
     public function show(Request $rq)
     {
         try {
-            $registrations = $this->registrationSer->paginate($rq->all());
+            $registrations = $this->registrationSer->setRequest($rq)->paginate();
             return $this->sendResourceResponse(TeacherRegistrationResource::collection($registrations));
         } catch (InvalidArgumentException $e) {
             return $this->sendError(__('alert.params.invalid'), Response::HTTP_BAD_REQUEST);
