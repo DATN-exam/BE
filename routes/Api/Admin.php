@@ -35,7 +35,7 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
             ->name('block');
         Route::post('/{teacher}/active', [TeacherController::class, 'active'])
             ->middleware('can:adminActive,teacher')
-            ->name('block');
+            ->name('active');
     });
 
     Route::group(['prefix' => 'students', 'as' => 'students.'], function () {
@@ -47,6 +47,6 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
             ->name('block');
         Route::post('/{student}/active', [StudentController::class, 'active'])
             ->middleware('can:adminActive,student')
-            ->name('block');
+            ->name('active');
     });
 });
