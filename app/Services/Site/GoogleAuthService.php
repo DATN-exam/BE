@@ -23,7 +23,7 @@ class GoogleAuthService extends BaseService
 
     public function loginCallback()
     {
-        $googleUser = $this->getGoogleDrive()->stateless()->user()->user;
+        $googleUser = $this->data;
         $message = __('alert.auth.login.success');
         $user = $this->checkUserExists($googleUser);
         if (!$user) {
