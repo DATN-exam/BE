@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Site;
+namespace App\Http\Controllers\Site\Teacher;
 
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\RegisterRequest;
 use App\Http\Resources\Site\TeacherRegistrationResource;
-use App\Services\Site\TeacherService;
+use App\Services\Site\Teacher\TeacherService;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use Throwable;
