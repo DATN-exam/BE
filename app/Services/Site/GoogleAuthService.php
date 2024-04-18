@@ -6,6 +6,7 @@ use App\Enums\User\UserStatus;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BaseService;
 use Laravel\Socialite\Facades\Socialite;
+use Throwable;
 
 class GoogleAuthService extends BaseService
 {
@@ -24,16 +25,22 @@ class GoogleAuthService extends BaseService
     public function loginCallback()
     {
         $googleUser = $this->getGoogleDrive()->stateless()->user()->user;
-        $message = __('alert.auth.login.success');
         $user = $this->checkUserExists($googleUser);
         if (!$user) {
             $user = $this->registerUserGoogle($googleUser);
-            $message = __('alert.auth.register.success');
         }
-        return [
-            ...$this->authService->loginWithgoogle($user),
-            "message" => $message
-        ];
+        try {
+            $jsonResponse = [
+                ...$this->authService->loginWithgoogle($user),
+                "status" => "success"
+            ];
+        } catch (Throwable $e) {
+            $jsonResponse = [
+                "message" => $e->getMessage(),
+                "status" => "failed",
+            ];
+        }
+        return $this->dataReturn(json_encode($jsonResponse));
     }
 
     private function checkUserExists($googleUser)
@@ -79,10 +86,12 @@ class GoogleAuthService extends BaseService
         return $googleDrive;
     }
 
-    function dataReturn($type, $mess)
+    function dataReturn($jsonResponse)
     {
         return "<script>
-                window.opener.receiveDataFromGoogleLoginWindow({status:'$type',message:'$mess'});
+                window.opener.receiveDataFromGoogleLoginWindow(
+                    {$jsonResponse}
+                );
                 window.close();
             </script>";
     }
