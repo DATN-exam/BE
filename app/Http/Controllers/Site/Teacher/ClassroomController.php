@@ -49,8 +49,8 @@ class ClassroomController extends BaseApiController
 
     public function update(Classroom $classroom, ClassroomUpdateRequest $rq)
     {
-        $classroom = $this->classroomSer->setRequestValidated($rq)->update($classroom);
         try {
+            $classroom = $this->classroomSer->setRequestValidated($rq)->update($classroom);
             return $this->sendResponse([
                 'message' => __('alert.update.success'),
             ]);
