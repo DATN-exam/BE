@@ -25,11 +25,11 @@ class RegistrationService extends BaseService
     {
         DB::beginTransaction();
         try {
-            $this->registrationRepo->update($teacherRegistration->id, [
+            $this->registrationRepo->update($teacherRegistration, [
                 'status' => TeacherRegistrationStatus::ACCEPT,
                 'employee_cofirm_id' => auth('api')->user()->id,
             ]);
-            $this->userRepo->update($teacherRegistration->user_id, [
+            $this->userRepo->update($teacherRegistration, [
                 'role' => UserRole::TEACHER
             ]);
             $teacherRegistration->refresh();
@@ -46,7 +46,7 @@ class RegistrationService extends BaseService
     {
         DB::beginTransaction();
         try {
-            $this->registrationRepo->update($teacherRegistration->id, [
+            $this->registrationRepo->update($teacherRegistration, [
                 'status' => TeacherRegistrationStatus::DENY,
                 'employee_cofirm_id' => auth('api')->user()->id,
             ]);
@@ -60,8 +60,8 @@ class RegistrationService extends BaseService
         }
     }
 
-    public function paginate($filters)
+    public function paginate()
     {
-        return $this->registrationRepo->paginate($filters);
+        return $this->registrationRepo->paginate($this->data);
     }
 }

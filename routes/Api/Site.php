@@ -25,7 +25,9 @@ Route::group(['middleware' => ['auth:api', 'teacher'], 'prefix' => 'teachers', '
     Route::post('register', [TeacherController::class, 'register'])->name('register')->withoutMiddleware(['teacher']);
 
     Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
-        Route::get('/',[ClassroomController::class, 'index'])->name('index');
-        Route::post('/',[ClassroomController::class, 'store'])->name('store');
+        Route::get('/', [ClassroomController::class, 'index'])->name('index');
+        Route::post('/', [ClassroomController::class, 'store'])->name('store');
+        Route::patch('/{classroom}', [ClassroomController::class, 'update'])
+            ->middleware('can:teacherUpdate,classroom')->name('update');
     });
 });

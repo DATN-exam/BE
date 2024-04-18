@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\RepositoryInterface;
+use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseRepository implements RepositoryInterface
 {
@@ -37,9 +38,14 @@ abstract class BaseRepository implements RepositoryInterface
         return $this->model->create($attributes);
     }
 
-    public function update($id, $attributes = [])
+    public function update(Model $model, $attributes = [])
     {
-        return $this->model->whereId($id)->update($attributes);
+        return $model->update($attributes);
+    }
+
+    public function updateById($id, $attributes = [])
+    {
+        return $this->model->find($id)->update($attributes);
     }
 
     public function updateMany($ids, $attributes = [])

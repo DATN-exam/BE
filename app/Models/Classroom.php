@@ -13,6 +13,7 @@ class Classroom extends Model
     use HasFactory, BaseScope;
 
     protected $fillable = [
+        'name',
         'teacher_id',
         'status',
         'description',

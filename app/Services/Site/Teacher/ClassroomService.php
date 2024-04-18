@@ -32,4 +32,12 @@ class ClassroomService extends BaseService
         ];
         return $this->classroomRepo->create($dataCreate);
     }
+
+    public function update(Classroom $classroom)
+    {
+        if (isset($this->data['status'])) {
+            $this->data['status'] = ClassroomStatus::getValueByKey($this->data['status']);
+        }
+        return $this->classroomRepo->update($classroom, $this->data);
+    }
 }
