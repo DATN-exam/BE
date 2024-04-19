@@ -19,7 +19,7 @@ class ClassroomKeyResource extends JsonResource
             'name' => $this->name,
             'key' => $this->key,
             'classroom_id' => $this->classroom_id,
-            'status' => $this->status,
+            'status' => $this->status->name,
             'quantity' => $this->quantity,
             'remaining' => $this->remaining,
             'expired' => $this->expired,

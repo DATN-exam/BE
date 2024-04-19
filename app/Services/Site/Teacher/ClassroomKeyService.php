@@ -2,12 +2,11 @@
 
 namespace App\Services\Site\Teacher;
 
-use App\Enums\Classroom\ClassroomStatus;
+use App\Enums\Classroom\ClassroomKeyStatus;
 use App\Models\Classroom;
+use App\Models\ClassroomKey;
 use App\Repositories\Classroom\ClassroomKeyRepositoryInterface;
-use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Services\BaseService;
-use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class ClassroomKeyService extends BaseService
@@ -30,5 +29,19 @@ class ClassroomKeyService extends BaseService
     public function paginate(Classroom $classroom)
     {
         return $this->keyRepo->paginateOfClassroom($classroom, $this->data);
+    }
+
+    public function block(ClassroomKey $key)
+    {
+        return $this->keyRepo->update($key, [
+            'status' => ClassroomKeyStatus::INACTIVE
+        ]);
+    }
+
+    public function active(ClassroomKey $key)
+    {
+        return $this->keyRepo->update($key, [
+            'status' => ClassroomKeyStatus::ACTIVE
+        ]);
     }
 }

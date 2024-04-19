@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\ClassroomKeyRequest;
 use App\Http\Resources\Site\Teacher\ClassroomKeyResource;
 use App\Models\Classroom;
+use App\Models\ClassroomKey;
 use App\Services\Site\Teacher\ClassroomKeyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -38,6 +39,32 @@ class ClassroomKeyController extends BaseApiController
             return $this->sendResourceResponse(
                 ClassroomKeyResource::collection($keys)
             );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function block(Classroom $classroom, ClassroomKey $classroomKey)
+    {
+        try {
+            $this->keySer->block($classroomKey);
+            return $this->sendResponse([
+                'message' => __('alert.update.success'),
+            ]);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function active(Classroom $classroom, ClassroomKey $classroomKey)
+    {
+        try {
+            $this->keySer->active($classroomKey);
+            return $this->sendResponse([
+                'message' => __('alert.update.success'),
+            ]);
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();

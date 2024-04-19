@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Classroom\ClassroomKeyStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,5 +18,9 @@ class ClassroomKey extends Model
         'quantity',
         'remaining',
         'expired',
+    ];
+
+    protected $casts = [
+        'status' => ClassroomKeyStatus::class,
     ];
 }
