@@ -12,7 +12,7 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 
     Route::group(['prefix' => 'google', 'as' => 'google.'], function () {
         Route::get('url', [AuthController::class, 'getLoginGoogleUrl'])->name('url');
-        Route::get('callback', [AuthController::class, 'loginGoogleCallback'])->name('loginGoogleCallback');
+        Route::post('callback', [AuthController::class, 'loginGoogleCallback'])->name('loginGoogleCallback');
     });
 });
 

@@ -94,10 +94,10 @@ class AuthController extends BaseApiController
         }
     }
 
-    public function loginGoogleCallback()
+    public function loginGoogleCallback(Request $rq)
     {
         try {
-            $data = $this->googleAuthSer->loginCallback();
+            $data = $this->googleAuthSer->setRequest($rq)->loginCallback();
             return $this->sendResponse($data);
         } catch (Throwable $e) {
             Log::error($e);
