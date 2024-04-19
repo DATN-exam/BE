@@ -18,6 +18,5 @@ use Illuminate\Support\Facades\Route;
 require __DIR__ . '/Api/site.php';
 require __DIR__ . '/Api/teacher.php';
 
-Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    require __DIR__ . '/Api/admin.php';
-});
+require __DIR__ . '/Api/admin.php';
+
