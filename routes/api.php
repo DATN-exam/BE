@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-require base_path('routes/api/site.php');
-require base_path('routes/api/teacher.php');
+require base_path('routes/Api/site.php');
+require base_path('routes/Api/teacher.php');
 
 Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-    require base_path('routes/api/admin.php');
+    require base_path('routes/Api/admin.php');
 });
