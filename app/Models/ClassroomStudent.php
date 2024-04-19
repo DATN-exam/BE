@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Enums\Classroom\ClassroomUserStatus;
+use App\Enums\Classroom\ClassroomStudentStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ClassroomUser extends Model
+class ClassroomStudent extends Model
 {
     use HasFactory;
 
@@ -17,6 +17,6 @@ class ClassroomUser extends Model
     ];
 
     protected $casts = [
-        'status' => ClassroomUserStatus::class,
+        'status' => ClassroomStudentStatus::class,
     ];
 }

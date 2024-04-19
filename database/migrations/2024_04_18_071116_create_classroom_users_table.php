@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('classroom_users', function (Blueprint $table) {
+        Schema::create('classroom_students', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('student_id');
             $table->unsignedInteger('classroom_id');
             $table->unsignedSmallInteger('status')->default(1);
+            $table->text('type_join')->nullable();
             $table->timestamps();
 
             $table->foreign('student_id')
@@ -37,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('classroom_users');
+        Schema::dropIfExists('classroom_students');
     }
 };

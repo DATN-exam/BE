@@ -4,10 +4,10 @@ namespace App\Enums\Classroom;
 
 use App\Traits\EnumToArray;
 
-enum ClassroomUserStatus: int
+enum ClassroomKeyStatus: int
 {
     use EnumToArray;
 
     case ACTIVE = 1;
-    case BLOCK = 2;
+    case INACTIVE = 2;
 }

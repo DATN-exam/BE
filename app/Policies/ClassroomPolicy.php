@@ -11,4 +11,9 @@ class ClassroomPolicy
     {
         return $teacher->id === $classroom->teacher_id;
     }
+
+    public function teacherManageClassroom(User $teacher, Classroom $classroom)
+    {
+        return $teacher->id === $classroom->teacher_id;
+    }
 }

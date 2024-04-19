@@ -10,9 +10,12 @@ class ClassroomKey extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
+        'key',
         'classroom_id',
         'status',
         'quantity',
+        'remaining',
         'expired',
     ];
 }

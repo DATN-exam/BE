@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\Classroom\ClassroomKeyRepository;
+use App\Repositories\Classroom\ClassroomKeyRepositoryInterface;
 use App\Repositories\Classroom\ClassroomRepository;
 use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Repositories\TeacherRegistration\TeacherRegistrationRepository;
@@ -20,6 +22,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(TeacherRegistrationRepositoryInterface::class, TeacherRegistrationRepository::class);
         $this->app->bind(ClassroomRepositoryInterface::class, ClassroomRepository::class);
+        $this->app->bind(ClassroomKeyRepositoryInterface::class, ClassroomKeyRepository::class);
     }
 
     /**
