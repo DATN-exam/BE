@@ -6,9 +6,6 @@ use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\TeacherController;
 use Illuminate\Support\Facades\Route;
 
-
-// Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
-
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
 });
@@ -53,4 +50,3 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
             ->name('active');
     });
 });
-// });

@@ -23,4 +23,9 @@ class ClassroomKey extends Model
     protected $casts = [
         'status' => ClassroomKeyStatus::class,
     ];
+
+    public function classroom()
+    {
+        return $this->belongsTo(Classroom::class, 'classroom_id', 'id');
+    }
 }
