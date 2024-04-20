@@ -29,7 +29,7 @@ class RegistrationService extends BaseService
                 'status' => TeacherRegistrationStatus::ACCEPT,
                 'employee_cofirm_id' => auth('api')->user()->id,
             ]);
-            $this->userRepo->update($teacherRegistration, [
+            $this->userRepo->update($teacherRegistration->user, [
                 'role' => UserRole::TEACHER
             ]);
             $teacherRegistration->refresh();

@@ -9,4 +9,6 @@ use App\Repositories\RepositoryInterface;
 interface ClassroomRepositoryInterface extends RepositoryInterface
 {
     public function paginateOfTeacher($filters, $teacherId);
+
+    public function paginateStudent($filters, $studentId);
 }

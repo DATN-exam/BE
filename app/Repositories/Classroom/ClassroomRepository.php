@@ -33,4 +33,13 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
                 return $query->modelSort($filters['sort']);
             });
     }
+
+    public function paginateStudent($filters, $studentId)
+    {
+        return $this->baseList($filters)
+            ->whereHas('students', function ($query) use($studentId)  {
+                return $query->where('student_id', $studentId);
+            })
+            ->paginate($filters['per_page'] ?? 10);
+    }
 }
