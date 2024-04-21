@@ -23,21 +23,30 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
     private function baseList($filters)
     {
         return $this->model
+            ->when(isset($filters['id']), function ($query) use ($filters) {
+                return $query->where('id', $filters['id']);
+            })
+            // ->when(isset($filters['name_teacher']), function ($query) use ($filters) {
+            //     return $query->whereHas('teacher', function ($query) use ($filters) {
+            //         return $query->where('first_name', 'like', $filters['name_teacher'] . '%')
+            //             ->orWhere->where('last_name', 'like', $filters['name_teacher'] . '%');
+            //     });
+            // })
             ->when(isset($filters['name']), function ($query) use ($filters) {
                 return $query->where('name', 'like', '%' . $filters['name'] . '%');
             })
             ->when(isset($filters['status']), function ($query) use ($filters) {
                 return $query->where('status', ClassroomStatus::getValueByKey($filters['status']));
             })
-            ->when(isset($filters['sort']), function ($query) use ($filters) {
-                return $query->modelSort($filters['sort']);
+            ->when(isset($filters['sort_column']), function ($query) use ($filters) {
+                return $query->orderBy($filters['sort_column'], $filters['sort_type'] ?? 'ASC');
             });
     }
 
     public function paginateStudent($filters, $studentId)
     {
         return $this->baseList($filters)
-            ->whereHas('students', function ($query) use($studentId)  {
+            ->whereHas('students', function ($query) use ($studentId) {
                 return $query->where('student_id', $studentId);
             })
             ->paginate($filters['per_page'] ?? 10);

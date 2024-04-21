@@ -23,8 +23,8 @@ class ClassroomController extends BaseApiController
 
     public function index(Request $rq)
     {
+        $classrooms = $this->classroomSer->setRequest($rq)->paginate();
         try {
-            $classrooms = $this->classroomSer->setRequest($rq)->paginate();
             return $this->sendResourceResponse(
                 ClassroomResource::collection($classrooms)
             );
