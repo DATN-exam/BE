@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Site\Teacher\ClassroomController;
 use App\Http\Controllers\Site\Teacher\ClassroomKeyController;
+use App\Http\Controllers\Site\Teacher\StudentController;
 use App\Http\Controllers\Site\Teacher\TeacherController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,9 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
             ->middleware('can:active,classroomKey,classroom')
             ->name('active');
     })->middleware('can:teacherManageClassroom,classroom');
+    
+    Route::group(['prefix' => '{classroom}/students', 'as' => 'students.'], function () {
+        Route::get('/', [StudentController::class, 'index'])->name('index');
+    });
 });
 // });

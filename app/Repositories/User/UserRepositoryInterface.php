@@ -7,11 +7,13 @@ use App\Repositories\RepositoryInterface;
 
 interface UserRepositoryInterface extends RepositoryInterface
 {
-    public function findUserVerify($token,$userId);
+    public function findUserVerify($token, $userId);
 
     public function checkUserExists($email);
 
     public function paginateStudent($filters);
 
     public function paginateTeacher($filters);
+
+    public function paginateStudentOfClassroom($filters, $classroomId);
 }

@@ -24,7 +24,7 @@ class ClassroomStudentRepository extends BaseRepository implements ClassroomStud
             ->first();
     }
 
-    public function addStudent($classroomId, User $student, $keyJoin = '')
+    public function addStudent($classroomId, User $student, $keyJoin = null)
     {
         return $this->model->create([
             'student_id' => $student->id,

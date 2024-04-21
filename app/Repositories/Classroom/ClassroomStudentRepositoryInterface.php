@@ -10,5 +10,5 @@ interface ClassroomStudentRepositoryInterface extends RepositoryInterface
 {
     public function getByClassroomStudent($classroomId, $studentId);
 
-    public function addStudent($classroomId, User $student, $keyJoin = '');
+    public function addStudent($classroomId, User $student, $keyJoin = null);
 }

@@ -26,6 +26,9 @@ class TeacherRegistrationRepository extends BaseRepository implements TeacherReg
     private function baseList($filters)
     {
         return $this->model
+            ->when(isset($filters['id']), function ($query) use ($filters) {
+                return $query->where('id', $filters['id']);
+            })
             ->when(isset($filters['username']), function ($query) use ($filters) {
                 return $query->whereHas('user', function ($query) use ($filters) {
                     return $query->where('users.first_name', 'like', $filters['username'] . '%')
@@ -38,10 +41,10 @@ class TeacherRegistrationRepository extends BaseRepository implements TeacherReg
                     TeacherRegistrationStatus::getValueByKey($filters['status'])
                 );
             })
-            ->when(isset($filters['sort']), function ($query) use ($filters) {
-                return $query->modelSort($filters['sort']);
+            ->when(isset($filters['sort_column']), function ($query) use ($filters) {
+                return $query->orderBy($filters['sort_column'], $filters['sort_type'] ?? 'ASC');
             })
-            ->with(['user','employeeCofirm']);
+            ->with(['user', 'employeeCofirm']);
     }
 
     public function paginate($filters)
