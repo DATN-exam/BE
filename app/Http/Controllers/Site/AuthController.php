@@ -25,11 +25,6 @@ class AuthController extends BaseApiController
 
     public function login(LoginRequest $rq)
     {
-        $user = collect(User::find(8));
-        $user2 = collect(User::find(9));
-        $u = $user->diff($user2);
-
-        dd($u);
         try {
             $data = $this->authSer->setRequestValidated($rq)->login();
             return $this->sendResponse($data);
