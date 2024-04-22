@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\ClassroomKey;
+use App\Models\SetQuestion;
 use App\Models\TeacherRegistration;
 use App\Models\User;
 use App\Observers\ClassroomKeyObserver;
+use App\Observers\SetQuestionObserver;
 use App\Observers\TeacherRegistrationObserver;
 use App\Observers\UserObserver;
 use Illuminate\Support\ServiceProvider;
@@ -28,5 +30,6 @@ class ObserverServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         TeacherRegistration::observe(TeacherRegistrationObserver::class);
         ClassroomKey::observe(ClassroomKeyObserver::class);
+        SetQuestion::observe(SetQuestionObserver::class);
     }
 }

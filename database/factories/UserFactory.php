@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -27,7 +28,7 @@ class UserFactory extends Factory
     {
         return [
             'email' => fake()->unique()->safeEmail(),
-            'status' => UserStatus::ACTIVE,
+            'status' => Arr::random([UserStatus::ACTIVE, UserStatus::ADMIN_BLOCK]),
             'role' => UserRole::STUDENT,
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),

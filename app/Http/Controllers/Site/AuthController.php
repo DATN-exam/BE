@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
 use App\Http\Resources\Site\StudentResource;
+use App\Models\User;
 use App\Services\Site\AuthService;
 use App\Services\Site\GoogleAuthService;
 use Illuminate\Http\Request;

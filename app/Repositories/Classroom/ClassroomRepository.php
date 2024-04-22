@@ -38,9 +38,7 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
             ->when(isset($filters['status']), function ($query) use ($filters) {
                 return $query->where('status', ClassroomStatus::getValueByKey($filters['status']));
             })
-            ->when(isset($filters['sort_column']), function ($query) use ($filters) {
-                return $query->orderBy($filters['sort_column'], $filters['sort_type'] ?? 'ASC');
-            });
+            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'ASC');
     }
 
     public function paginateStudent($filters, $studentId)
