@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\Site\Teacher\ClassroomController;
 use App\Http\Controllers\Site\Teacher\ClassroomKeyController;
+use App\Http\Controllers\Site\Teacher\Question\SetQuestionController;
 use App\Http\Controllers\Site\Teacher\StudentController;
 use App\Http\Controllers\Site\Teacher\TeacherController;
 use Illuminate\Support\Facades\Route;
 
-// Route::group(['middleware' => ['auth:api', 'teacher'], 'prefix' => 'teachers', 'as' => 'teachers.'], function () {
 Route::post('register', [TeacherController::class, 'register'])->name('register')->withoutMiddleware(['teacher']);
 
 Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
@@ -27,9 +27,18 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
             ->middleware('can:active,classroomKey,classroom')
             ->name('active');
     })->middleware('can:teacherManageClassroom,classroom');
-    
+
     Route::group(['prefix' => '{classroom}/students', 'as' => 'students.'], function () {
         Route::get('/', [StudentController::class, 'index'])->name('index');
     });
 });
-// });
+
+Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () {
+    Route::get('/', [SetQuestionController::class, 'index'])
+        ->name('index');
+    Route::post('/', [SetQuestionController::class, 'store'])
+        ->name('store');
+    Route::patch('/{setQuestion}', [SetQuestionController::class, 'update'])
+        ->middleware('can:update,setQuestion')
+        ->name('update');
+});

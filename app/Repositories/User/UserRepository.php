@@ -43,9 +43,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->when(isset($filters['email']), function ($query) use ($filters) {
                 return $query->where('email', 'like', $filters['email'] . '%');
             })
-            ->when(isset($filters['sort_column']), function ($query) use ($filters) {
-                return $query->orderBy($filters['sort_column'], $filters['sort_type'] ?? 'ASC');
-            });
+            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'ASC');
     }
 
     public function paginateStudent($filters)

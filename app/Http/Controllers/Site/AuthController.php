@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
 use App\Http\Resources\Site\StudentResource;
+use App\Models\User;
 use App\Services\Site\AuthService;
 use App\Services\Site\GoogleAuthService;
 use Illuminate\Http\Request;
@@ -24,6 +25,11 @@ class AuthController extends BaseApiController
 
     public function login(LoginRequest $rq)
     {
+        $user = collect(User::find(8));
+        $user2 = collect(User::find(9));
+        $u = $user->diff($user2);
+
+        dd($u);
         try {
             $data = $this->authSer->setRequestValidated($rq)->login();
             return $this->sendResponse($data);
