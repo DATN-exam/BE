@@ -16,6 +16,7 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
     public function paginate(SetQuestion $setQuestion, $filters)
     {
         return $this->model->where('set_question_id', $setQuestion->id)
+            ->with(['answers'])
             ->paginate($filters['per_page'] ?? 10);
     }
 }

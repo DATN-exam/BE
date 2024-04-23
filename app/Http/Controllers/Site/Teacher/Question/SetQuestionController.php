@@ -23,7 +23,7 @@ class SetQuestionController extends BaseApiController
     {
         try {
             $setQuestions = $this->setQuestionSer->setRequest($rq)->paginate();
-            return $this->sendResponse(
+            return $this->sendResourceResponse(
                 SetQuestionResource::collection($setQuestions)
             );
         } catch (Throwable $e) {

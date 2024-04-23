@@ -10,7 +10,7 @@ class SetQuestion extends Model
 {
     use HasFactory;
 
-    protected $fillable=[
+    protected $fillable = [
         'teacher_id',
         'title',
         'status',
@@ -21,4 +21,14 @@ class SetQuestion extends Model
     protected $casts = [
         'status' => SetQuestionStatus::class,
     ];
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class, 'set_question_id', 'id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id', 'id');
+    }
 }

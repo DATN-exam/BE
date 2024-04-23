@@ -31,4 +31,9 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class,'question_id','id');
     }
+
+    public function setQuestion()
+    {
+        return $this->belongsTo(SetQuestion::class,'set_question_id','id');
+    }
 }
