@@ -2,12 +2,16 @@
 
 namespace App\Providers;
 
+use App\Repositories\Answer\AnswerRepository;
+use App\Repositories\Answer\AnswerRepositoryInterface;
 use App\Repositories\Classroom\ClassroomKeyRepository;
 use App\Repositories\Classroom\ClassroomKeyRepositoryInterface;
 use App\Repositories\Classroom\ClassroomRepository;
 use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Repositories\Classroom\ClassroomStudentRepository;
 use App\Repositories\Classroom\ClassroomStudentRepositoryInterface;
+use App\Repositories\Question\QuestionRepository;
+use App\Repositories\Question\QuestionRepositoryInterface;
 use App\Repositories\SetQuestion\SetQuestionRepository;
 use App\Repositories\SetQuestion\SetQuestionRepositoryInterface;
 use App\Repositories\TeacherRegistration\TeacherRegistrationRepository;
@@ -29,6 +33,8 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ClassroomKeyRepositoryInterface::class, ClassroomKeyRepository::class);
         $this->app->bind(ClassroomStudentRepositoryInterface::class, ClassroomStudentRepository::class);
         $this->app->bind(SetQuestionRepositoryInterface::class, SetQuestionRepository::class);
+        $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
+        $this->app->bind(AnswerRepositoryInterface::class, AnswerRepository::class);
     }
 
     /**

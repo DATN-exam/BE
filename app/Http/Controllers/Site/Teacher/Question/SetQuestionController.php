@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Site\Teacher\Question;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\Question\SetQuestionRequest;
 use App\Http\Requests\Site\Teacher\Question\SetQuestionUpdateRequest;
-use App\Http\Resources\Site\Teacher\SetQuestionResource;
+use App\Http\Resources\Site\Teacher\Question\SetQuestionResource;
 use App\Models\SetQuestion;
 use App\Services\Site\Teacher\Question\SetQuetionService;
 use Illuminate\Http\Request;
