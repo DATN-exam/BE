@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Site\Teacher;
+namespace App\Services\Site\Teacher\Classroom;
 
 use App\Enums\Classroom\ClassroomKeyStatus;
 use App\Models\Classroom;

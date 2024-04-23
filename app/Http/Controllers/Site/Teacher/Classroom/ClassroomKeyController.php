@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Site\Teacher;
+namespace App\Http\Controllers\Site\Teacher\Classroom;
 
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\ClassroomKeyRequest;
 use App\Http\Resources\Site\Teacher\ClassroomKeyResource;
 use App\Models\Classroom;
 use App\Models\ClassroomKey;
-use App\Services\Site\Teacher\ClassroomKeyService;
+use App\Services\Site\Teacher\Classroom\ClassroomKeyService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Throwable;

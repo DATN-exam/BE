@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Site\Teacher;
+namespace App\Http\Resources\Site\Teacher\Question;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SetQuestionResource extends JsonResource
+class AnswerResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,9 @@ class SetQuestionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'teacher_id' => $this->teacher_id,
-            'title' => $this->title,
-            'status' => $this->status->name,
-            'description' => $this->description,
-            'note' => $this->note,
+            'question_id' => $this->question_id,
+            'answer' => $this->answer,
+            'is_correct' => $this->is_correct,
         ];
     }
 }

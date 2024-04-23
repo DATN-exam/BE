@@ -4,7 +4,6 @@ namespace App\Services\Site\Teacher\Question;
 
 use App\Enums\Question\SetQuestionStatus;
 use App\Models\SetQuestion;
-use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Repositories\SetQuestion\SetQuestionRepositoryInterface;
 use App\Services\BaseService;
 
