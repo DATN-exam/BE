@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Site\Teacher\Question;
 
+use App\Enums\Classroom\ClassroomStatus;
+use App\Enums\User\UserRole;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\Question\SetQuestionRequest;
 use App\Http\Requests\Site\Teacher\Question\SetQuestionUpdateRequest;
 use App\Http\Resources\Site\Teacher\Question\SetQuestionResource;
+use App\Models\Classroom;
+use App\Models\ClassroomStudent;
 use App\Models\SetQuestion;
+use App\Models\User;
 use App\Services\Site\Teacher\Question\SetQuetionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -23,7 +28,7 @@ class SetQuestionController extends BaseApiController
     {
         try {
             $setQuestions = $this->setQuestionSer->setRequest($rq)->paginate();
-            return $this->sendResponse(
+            return $this->sendResourceResponse(
                 SetQuestionResource::collection($setQuestions)
             );
         } catch (Throwable $e) {
