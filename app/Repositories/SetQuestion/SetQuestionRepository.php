@@ -18,7 +18,7 @@ class SetQuestionRepository extends BaseRepository implements SetQuestionReposit
             ->when(isset($filters['title']), function ($query) use ($filters) {
                 return $query->where('title', 'like', '%' . $filters['title'] . '%');
             })
-            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'ASC');
+            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'DESC');
     }
 
     public function paginateOfTeacher($teacherId, $filters)

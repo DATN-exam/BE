@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Site\Teacher;
 
 use App\Enums\Classroom\ClassroomKeyStatus;
+use App\Rules\InEnumRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ClassroomKeyRequest extends FormRequest
 {
@@ -25,7 +25,9 @@ class ClassroomKeyRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
-            'status' => [Rule::in(ClassroomKeyStatus::getKeys())],
+            'status' => [
+                new InEnumRule(ClassroomKeyStatus::getKeys())
+            ],
             'quantity' => ['numeric', 'min:1'],
             'expired' => [
                 'date_format:' . config('define.date_format'),

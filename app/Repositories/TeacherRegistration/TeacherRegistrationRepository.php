@@ -41,7 +41,8 @@ class TeacherRegistrationRepository extends BaseRepository implements TeacherReg
                     TeacherRegistrationStatus::getValueByKey($filters['status'])
                 );
             })
-            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'ASC')
+            ->orderBy('status', 'ASC')
+            ->orderBy('created_at', 'DESC')
             ->with(['user', 'employeeCofirm']);
     }
 

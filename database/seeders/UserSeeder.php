@@ -8,6 +8,7 @@ use App\Models\Answer;
 use App\Models\Classroom;
 use App\Models\Question;
 use App\Models\SetQuestion;
+use App\Models\TeacherRegistration;
 use App\Models\User;
 use Database\Factories\AnswerFactory;
 use Database\Factories\QuestionFactory;
@@ -115,6 +116,17 @@ class UserSeeder extends Seeder
             'role' => UserRole::TEACHER,
         ])->create();
 
+        User::factory(100)
+            ->state([
+                'status' => UserStatus::ACTIVE,
+            ])
+            ->has(
+                TeacherRegistration::factory()
+                    ->count(1)
+                    ->state(function (array $attributes, User $user) {
+                        return ['user_id' => $user->id];
+                    })
+            )->create();
         User::factory(1000)->create();
     }
 

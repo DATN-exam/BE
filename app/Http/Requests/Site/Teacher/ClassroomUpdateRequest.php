@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Site\Teacher;
 
 use App\Enums\Classroom\ClassroomStatus;
+use App\Rules\InEnumRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ClassroomUpdateRequest extends FormRequest
 {
@@ -26,7 +26,10 @@ class ClassroomUpdateRequest extends FormRequest
         return [
             'name' => ['string', 'min:5', 'max:255'],
             'description' => ['string', 'min:5', 'max:255'],
-            'status' => [Rule::in(ClassroomStatus::getKeys())]
+            'status' => [
+                'required',
+                new InEnumRule(ClassroomStatus::getKeys()),
+            ]
         ];
     }
 }

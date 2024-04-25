@@ -3,8 +3,8 @@
 namespace App\Http\Requests\Site\Teacher\Question;
 
 use App\Enums\Question\SetQuestionStatus;
+use App\Rules\InEnumRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class SetQuestionUpdateRequest extends FormRequest
 {
@@ -25,9 +25,9 @@ class SetQuestionUpdateRequest extends FormRequest
     {
         return [
             'title' => ['string', 'max:255'],
-            'status' => [Rule::in([
-                SetQuestionStatus::ACTIVE->name, SetQuestionStatus::BLOCK->name
-            ])],
+            'status' => [
+                new InEnumRule([SetQuestionStatus::ACTIVE->name, SetQuestionStatus::BLOCK->name])
+            ],
             'note' => ['string', 'max:255'],
             'description' => ['string', 'max:255'],
         ];
