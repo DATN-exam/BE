@@ -5,8 +5,8 @@ namespace App\Http\Requests\Site\Teacher\Question;
 use App\Enums\Question\QuestionStatus;
 use App\Enums\Question\QuestionType;
 use App\Rules\AnswersRule;
+use App\Rules\InEnumRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class QuestionRequest extends FormRequest
 {
@@ -29,8 +29,14 @@ class QuestionRequest extends FormRequest
             'question' => ['required', 'string', 'max:255'],
             'score' => ['numeric', 'between:1,99'],
             'is_testing' => ['required', 'boolean'],
-            'status' => ['required', Rule::in(QuestionStatus::getKeys())],
-            'type' => ['required', Rule::in(QuestionType::getKeys())],
+            'status' => [
+                'required',
+                new InEnumRule(QuestionStatus::getKeys())
+            ],
+            'type' => [
+                'required',
+                new InEnumRule(QuestionType::getKeys())
+            ],
             'answers' => ['required', 'array', 'min:1', new AnswersRule()],
             'answers.*.answer' => ['required', 'string', 'max:255'],
             'answers.*.is_correct' => ['required', 'boolean'],
