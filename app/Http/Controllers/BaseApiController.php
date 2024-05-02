@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class BaseApiController extends Controller
 {
@@ -30,6 +32,13 @@ class BaseApiController extends Controller
             "message" => $message ?: __('alert.server_error'),
             ...$errors
         ], $status);
+    }
+
+    public function sendCsvResponse($file, $nameFile): BinaryFileResponse
+    {
+        return Excel::download($file, $nameFile, \Maatwebsite\Excel\Excel::CSV, [
+            'Content-Type' => 'text/csv',
+        ]);
     }
 
     private function response($data, $status)

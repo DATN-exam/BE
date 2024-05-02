@@ -17,6 +17,7 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
     {
         return $this->baseList($filters)
             ->where('teacher_id', $techerId)
+            ->withCount('students')
             ->paginate($filters['per_page'] ?? 10);
     }
 

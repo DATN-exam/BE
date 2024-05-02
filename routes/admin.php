@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
 
     Route::group(['prefix' => 'students', 'as' => 'students.'], function () {
         Route::get('/', [StudentController::class, 'index'])->name('index');
+        Route::get('/export', [StudentController::class, 'export'])->name('export');
         Route::get('/{student}', [StudentController::class, 'show'])->name('show');
         Route::patch('/{student}', [StudentController::class, 'update'])->name('update');
         Route::post('/{student}/block', [StudentController::class, 'block'])
