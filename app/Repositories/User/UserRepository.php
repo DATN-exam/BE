@@ -37,7 +37,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 return $query->where('id', $filters['id']);
             })
             ->when(isset($filters['name']), function ($query) use ($filters) {
-                return $query->where('firts_name', 'like', $filters['name'] . '%')
+                return $query->where('first_name', 'like', $filters['name'] . '%')
                     ->orWhere->where('last_name', 'like', $filters['name'] . '%');
             })
             ->when(isset($filters['email']), function ($query) use ($filters) {
@@ -54,6 +54,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             })
             ->where('role', UserRole::STUDENT)
             ->paginate($filters['per_page'] ?? 15);
+    }
+
+    public function exportStudent($filters)
+    {
+        return $this->baseList($filters)
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                return $query->where('status', UserStatus::getValueByKey($filters['status']));
+            })
+            ->where('role', UserRole::STUDENT)
+            ->get();
     }
 
     public function paginateTeacher($filters)

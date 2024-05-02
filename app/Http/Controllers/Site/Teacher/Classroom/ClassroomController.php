@@ -58,4 +58,16 @@ class ClassroomController extends BaseApiController
             return $this->sendError();
         }
     }
+
+    public function show(Classroom $classroom)
+    {
+        try {
+            return $this->sendResourceResponse(
+                ClassroomResource::make($classroom)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
 }

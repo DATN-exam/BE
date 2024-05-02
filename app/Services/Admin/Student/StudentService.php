@@ -6,13 +6,15 @@ use App\Enums\User\UserStatus;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BaseService;
+use App\Services\ExcelService;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
 class StudentService extends BaseService
 {
     public function __construct(
-        protected UserRepositoryInterface $userRepo
+        protected UserRepositoryInterface $userRepo,
+        protected ExcelService $excelSer
     ) {
         //
     }
@@ -57,5 +59,11 @@ class StudentService extends BaseService
             DB::rollBack();
             throw $e;
         }
+    }
+
+    public function export()
+    {
+        $students = $this->userRepo->exportStudent($this->data);
+        return $this->excelSer->exportStudent($students);
     }
 }

@@ -74,4 +74,14 @@ class StudentController extends BaseApiController
             return $this->sendError();
         }
     }
+
+    public function export(Request $rq)
+    {
+        try {
+            return $this->sendCsvResponse($this->studentSer->setRequest($rq)->export(), 'students.csv');
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError($e->getMessage());
+        }
+    }
 }

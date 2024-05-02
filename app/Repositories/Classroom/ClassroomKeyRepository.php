@@ -19,7 +19,10 @@ class ClassroomKeyRepository extends BaseRepository implements ClassroomKeyRepos
     {
         return $this->model
             ->where('classroom_id', $classroom->id)
-            ->orderBy('created_at', 'DESC')
+            ->when(isset($filters['name']), function ($query) use ($filters) {
+                return $query->where('name', 'like', '%' . $filters['name'] . '%');
+            })
+            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'DESC')
             ->paginate($filters['per_page'] ?? 10);
     }
 

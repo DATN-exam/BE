@@ -21,6 +21,7 @@ class ClassroomResource extends JsonResource
             'teacher' => StudentResource::make($this->whenLoaded('teacher')),
             'status' => $this->status->name,
             'description' => $this->description,
+            'count_student' => $this->students_count,
             'avatar' => $this->avatar,
         ];
     }
