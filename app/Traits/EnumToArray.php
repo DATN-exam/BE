@@ -26,4 +26,11 @@ trait EnumToArray
         $array = self::toArray();
         return $array[Str::upper($key)] ?? null;
     }
+
+    public static function getKeyByValue($value)
+    {
+        $array = self::toArray();
+        $key = array_search($value, $array);
+        return $key !== false ? $key : null;
+    }
 }

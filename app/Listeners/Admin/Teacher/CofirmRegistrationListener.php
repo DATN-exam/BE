@@ -4,7 +4,6 @@ namespace App\Listeners\Admin\Teacher;
 
 use App\Notifications\Teacher\ConfirmTeacherNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Notification;
 
 class CofirmRegistrationListener implements ShouldQueue
@@ -24,7 +23,6 @@ class CofirmRegistrationListener implements ShouldQueue
     {
         $user = $event->getUser();
         $registration = $event->getRegistration();
-
         Notification::send(
             $user,
             new ConfirmTeacherNotification($registration)

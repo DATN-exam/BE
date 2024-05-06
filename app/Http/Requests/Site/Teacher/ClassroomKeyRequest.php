@@ -26,10 +26,12 @@ class ClassroomKeyRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'min:3', 'max:255'],
             'status' => [
+                'string',
                 new InEnumRule(ClassroomKeyStatus::getKeys())
             ],
             'quantity' => ['numeric', 'min:1'],
             'expired' => [
+                'required',
                 'date_format:' . config('define.date_format'),
                 'after_or_equal:now'
             ],

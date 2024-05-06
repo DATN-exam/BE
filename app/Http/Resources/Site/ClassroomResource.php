@@ -23,6 +23,7 @@ class ClassroomResource extends JsonResource
             'description' => $this->description,
             'count_student' => $this->students_count,
             'avatar' => $this->avatar,
+            'quantity_student' => $this->whenHas('quantity_student', $this->quantity_student)
         ];
     }
 }

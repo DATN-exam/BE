@@ -4,6 +4,7 @@ namespace App\Notifications\Teacher;
 
 use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
 use App\Models\TeacherRegistration;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -25,7 +26,7 @@ class ConfirmTeacherNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -37,6 +38,13 @@ class ConfirmTeacherNotification extends Notification implements ShouldQueue
             return $this->mailDeny();
         };
         return $this->mailAccept();
+    }
+
+    public function broadcastOn()
+    {
+        return [
+            new PrivateChannel('App.Models.User.{id}')
+        ];
     }
 
     private function mailAccept()

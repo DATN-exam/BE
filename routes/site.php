@@ -22,7 +22,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'auth', 'as' => 'auth.'], 
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => 'auth:api', 'prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
-        Route::get('join', [ClassroomController::class, 'join'])->name('join');
+        Route::get('join/{classroomKey}', [ClassroomController::class, 'join'])->name('join');
         Route::get('/', [ClassroomController::class, 'index'])->name('index');
     });
 });

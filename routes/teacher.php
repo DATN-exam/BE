@@ -34,6 +34,10 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
         //Student
         Route::group(['prefix' => '{classroom}/students', 'as' => 'students.'], function () {
             Route::get('/', [StudentController::class, 'index'])->name('index');
+            Route::group(['middleware' => ['can:classroomManageStudent,classroom,student']], function () {
+                Route::post('/{student}/block', [StudentController::class, 'block'])->name('block');
+                Route::post('/{student}/active', [StudentController::class, 'active'])->name('active');
+            });
         });
     });
 });

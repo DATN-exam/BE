@@ -22,6 +22,9 @@ class ClassroomKeyRepository extends BaseRepository implements ClassroomKeyRepos
             ->when(isset($filters['name']), function ($query) use ($filters) {
                 return $query->where('name', 'like', '%' . $filters['name'] . '%');
             })
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                return $query->where('status', ClassroomKeyStatus::getValueByKey($filters['status']));
+            })
             ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'DESC')
             ->paginate($filters['per_page'] ?? 10);
     }

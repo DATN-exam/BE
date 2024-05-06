@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Site\Student;
 
 use App\Http\Controllers\BaseApiController;
-use App\Http\Controllers\Controller;
 use App\Http\Resources\Site\ClassroomResource;
+use App\Models\ClassroomKey;
 use App\Services\Site\Student\ClassroomService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -16,10 +16,10 @@ class ClassroomController extends BaseApiController
     {
     }
 
-    public function join(Request $rq)
+    public function join(ClassroomKey $classroomKey)
     {
         try {
-            $this->classroomSer->setRequest($rq)->join();
+            $this->classroomSer->join($classroomKey);
             return $this->sendResponse([
                 'message' => __('alert.classroom.join.success')
             ]);

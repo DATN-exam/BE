@@ -21,6 +21,7 @@ class ClassroomStudentRepository extends BaseRepository implements ClassroomStud
         return $this->model
             ->where('classroom_id', $classroomId)
             ->where('student_id', $studentId)
+            ->with('classroom')
             ->first();
     }
 
@@ -40,5 +41,14 @@ class ClassroomStudentRepository extends BaseRepository implements ClassroomStud
             ->when(isset($filters['name']), function ($query) use ($filters) {
                 return $query->where('name', 'like', $filters['name'] . '%');
             });
+    }
+
+    public function updateStatusStudent(Classroom $classroom, User $student, ClassroomStudentStatus $status)
+    {
+        return $this->model
+            ->where('classroom_id', $classroom->id)
+            ->where('student_id', $student->id)
+            ->first()
+            ->update(['status' => $status]);
     }
 }
