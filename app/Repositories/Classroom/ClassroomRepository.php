@@ -5,6 +5,7 @@ namespace App\Repositories\Classroom;
 use App\Enums\Classroom\ClassroomStatus;
 use App\Models\Classroom;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 class ClassroomRepository extends BaseRepository implements ClassroomRepositoryInterface
 {
@@ -16,8 +17,13 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
     public function paginateOfTeacher($filters, $techerId)
     {
         return $this->baseList($filters)
-            ->where('teacher_id', $techerId)
-            ->withCount('students')
+            ->select('classrooms.*', DB::raw('COUNT(classroom_students.student_id) as quantity_student'))
+            ->leftJoin('classroom_students', 'classroom_students.classroom_id', '=', 'classrooms.id')
+            ->groupBy('classrooms.id')
+            ->when(isset($filters['sort_column']) && $filters['sort_column'] == 'count_student', function ($query) use ($filters) {
+                return $query->orderBy('quantity_student', $filters['sort_type'] ?? 'ASC');
+            })
+            ->where('classrooms.teacher_id', $techerId)
             ->paginate($filters['per_page'] ?? 10);
     }
 
@@ -39,7 +45,9 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
             ->when(isset($filters['status']), function ($query) use ($filters) {
                 return $query->where('status', ClassroomStatus::getValueByKey($filters['status']));
             })
-            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'DESC');
+            ->when(isset($filters['sort_column']) && $filters['sort_column'] != 'count_student', function ($query) use ($filters) {
+                return $query->orderBy($filters['sort_column'], $filters['sort_type'] ?? 'ASC');
+            });
     }
 
     public function paginateStudent($filters, $studentId)

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Classroom extends Model
 {
@@ -33,5 +34,10 @@ class Classroom extends Model
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(User::class, ClassroomStudent::class, 'classroom_id', 'student_id');
+    }
+
+    public function classroomStudents(): HasMany
+    {
+        return $this->hasMany(ClassroomStudent::class, 'classroom_id', 'id');
     }
 }

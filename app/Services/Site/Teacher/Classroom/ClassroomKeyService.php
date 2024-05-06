@@ -19,6 +19,9 @@ class ClassroomKeyService extends BaseService
 
     public function store(Classroom $classroom)
     {
+        if (isset($this->data['status'])) {
+            $this->data['status'] = ClassroomKeyStatus::getValueByKey($this->data['status']);
+        }
         return $this->keyRepo->create([
             ...$this->data,
             'classroom_id' => $classroom->id,

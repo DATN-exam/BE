@@ -28,6 +28,7 @@ class ClassroomRequest extends FormRequest
             'description' => ['required', 'string', 'min:5', 'max:255'],
             'status' => [
                 'required',
+                'string',
                 new InEnumRule(ClassroomStatus::getKeys()),
             ]
         ];

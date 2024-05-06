@@ -2,7 +2,10 @@
 
 namespace App\Services\Site\Student;
 
+use App\Enums\Classroom\ClassroomKeyStatus;
+use App\Enums\Classroom\ClassroomStatus;
 use App\Enums\Classroom\ClassroomStudentStatus;
+use App\Models\ClassroomKey;
 use App\Repositories\Classroom\ClassroomKeyRepositoryInterface;
 use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Repositories\Classroom\ClassroomStudentRepositoryInterface;
@@ -20,15 +23,22 @@ class ClassroomService extends BaseService
         //
     }
 
-    public function join()
+    public function join(ClassroomKey $classroomKey)
     {
-        $key = $this->keyRepo->check($this->data['key']);
-        if ($key === null) {
-            return throw new \Exception(__('alert.classroom.key.error'));
-        }
         $student = auth('api')->user();
+        if (
+            $classroomKey->remaining < 1
+            || $classroomKey->status == ClassroomKeyStatus::INACTIVE
+            || $classroomKey->expired < getToday()
+        ) {
+            return throw new \Exception(__('alert.classroom.key.invalid'));
+        }
+        $classroomKey->load('classroom');
+        if ($classroomKey->classroom->teacher_id === $student->id) {
+            return throw new \Exception(__('alert.classroom.key.not'));
+        }
         $classroomStudent = $this->classroomStudentRepo
-            ->getByClassroomStudent($key->classroom->id, $student->id);
+            ->getByClassroomStudent($classroomKey->classroom_id, $student->id);
         if ($classroomStudent && $classroomStudent->status === ClassroomStudentStatus::ACTIVE) {
             return throw new \Exception(__('alert.classroom.key.actived'));
         }
@@ -37,8 +47,8 @@ class ClassroomService extends BaseService
         }
         DB::beginTransaction();
         try {
-            $this->keyRepo->decrement($key);
-            $this->classroomStudentRepo->addStudent($key->classroom_id, $student, $this->data['key']);
+            $this->keyRepo->decrement($classroomKey);
+            $this->classroomStudentRepo->addStudent($classroomKey->classroom_id, $student, $classroomKey->key);
             DB::commit();
             return;
         } catch (Throwable $e) {

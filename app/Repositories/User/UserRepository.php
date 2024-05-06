@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Enums\Classroom\ClassroomStudentStatus;
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
 use App\Models\User;
@@ -43,7 +44,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->when(isset($filters['email']), function ($query) use ($filters) {
                 return $query->where('email', 'like', $filters['email'] . '%');
             })
-            ->orderBy($filters['sort_column'] ?? 'created_at', $filters['sort_type'] ?? 'DESC');
+            ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'DESC');
     }
 
     public function paginateStudent($filters)
@@ -76,13 +77,28 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->paginate($filters['per_page'] ?? 15);
     }
 
-    public function paginateStudentOfClassroom($filters, $classroomId)
+    public function paginateStudentOfClassroom($filters, $classroom)
     {
-        return $this->baseList($filters)
-            ->whereHas('classroomStudents', function ($query) use ($classroomId) {
-                return $query->where('classroom_id', $classroomId);
+        return $classroom->students()
+            ->select(
+                'users.*',
+                'classroom_students.type_join as type_join',
+                'classroom_students.status as classroom_status'
+            )
+            ->when(isset($filters['id']), function ($query) use ($filters) {
+                return $query->where('id', $filters['id']);
             })
-            ->with('classroomStudents')
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                return $query->where('classroom_students.status', ClassroomStudentStatus::getValueByKey($filters['status']));
+            })
+            ->when(isset($filters['name']), function ($query) use ($filters) {
+                return $query->where('first_name', 'like', $filters['name'] . '%')
+                    ->orWhere->where('last_name', 'like', $filters['name'] . '%');
+            })
+            ->when(isset($filters['email']), function ($query) use ($filters) {
+                return $query->where('email', 'like', $filters['email'] . '%');
+            })
+            ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'DESC')
             ->paginate($filters['per_page'] ?? 15);
     }
 }
