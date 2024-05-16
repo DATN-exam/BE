@@ -44,10 +44,9 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
 
 //Set question
 Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () {
-    Route::get('/', [SetQuestionController::class, 'index'])
-        ->name('index');
-    Route::post('/', [SetQuestionController::class, 'store'])
-        ->name('store');
+    Route::get('/', [SetQuestionController::class, 'index'])->name('index');
+    Route::get('/{setQuestion}', [SetQuestionController::class, 'show'])->name('show');
+    Route::post('/', [SetQuestionController::class, 'store'])->name('store');
 
     Route::group(['middleware' => ['can:update,setQuestion']], function () {
         Route::patch('/{setQuestion}', [SetQuestionController::class, 'update'])->name('update');
@@ -56,7 +55,8 @@ Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () 
             Route::post('/', [QuestionController::class, 'store'])->name('store');
             Route::put('/', [QuestionController::class, 'update'])->name('update');
             Route::get('/', [QuestionController::class, 'index'])->name('index');
-            Route::post('/{question}', [QuestionController::class, 'update'])->name('update');
+            Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
+            Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
         });
     });
 });
