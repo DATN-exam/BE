@@ -6,6 +6,7 @@ use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\Question\QuestionRequest;
 use App\Http\Requests\Site\Teacher\Question\QuestionUpdateRequest;
 use App\Http\Resources\Site\Teacher\Question\QuestionResource;
+use App\Models\Question;
 use App\Models\SetQuestion;
 use App\Services\Site\Teacher\Question\QuestionService;
 use Illuminate\Http\Request;
@@ -45,10 +46,22 @@ class QuestionController extends BaseApiController
         }
     }
 
-    public function update(SetQuestion $setQuestion, QuestionUpdateRequest $rq)
+    public function show(SetQuestion $setQuestion, Question $question)
     {
         try {
-            // $this->questionService->setRequestValidated($rq)->update($setQuestion);
+            return $this->sendResourceResponse(
+                QuestionResource::make($question->load('answers'))
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function update(SetQuestion $setQuestion, Question $question, QuestionUpdateRequest $rq)
+    {
+        try {
+            $this->questionService->setRequestValidated($rq)->handleUpdate($question);
             return $this->sendResponse([
                 'message' => __('alert.update.success'),
             ]);

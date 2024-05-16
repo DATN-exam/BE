@@ -14,8 +14,8 @@ use Throwable;
 class QuestionService extends BaseService
 {
     public function __construct(
-        protected QuestionRepositoryInterface $setQuestionRepo,
-        protected AnswerService $answerSer
+        protected QuestionRepositoryInterface $questionRepo,
+        protected AnswerService $answerSer,
     ) {
         //
     }
@@ -37,7 +37,7 @@ class QuestionService extends BaseService
 
     private function create(SetQuestion $setQuestion)
     {
-        return $this->setQuestionRepo->create([
+        return $this->questionRepo->create([
             "set_question_id" => $setQuestion->id,
             "question" => $this->data["question"],
             "score" => $this->data["score"],
@@ -49,6 +49,38 @@ class QuestionService extends BaseService
 
     public function paginate(SetQuestion $setQuestion)
     {
-        return $this->setQuestionRepo->paginate($setQuestion, $this->data);
+        return $this->questionRepo->paginate($setQuestion, $this->data);
+    }
+
+    public function handleUpdate(Question $question)
+    {
+        DB::beginTransaction();
+        try {
+            $this->update($question);
+            if (!empty($this->data['answers_delete'])) {
+                $this->answerSer->deleteAnswers($this->data['answers_delete']);
+            }
+            if (!empty($this->data['answers_update'])) {
+                $this->answerSer->updateAnswers($this->data['answers_update']);
+            }
+            if (!empty($this->data['answers_add'])) {
+                $this->answerSer->insert($this->data['answers_add'], $question);
+            }
+            DB::commit();
+            return;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return throw $e;
+        }
+    }
+
+    private function update(Question $question)
+    {
+        $data = [
+            "question" => $this->data['question'],
+            "is_testing" => $this->data['is_testing'],
+            "status" => QuestionStatus::getValueByKey($this->data['status']),
+        ];
+        return $this->questionRepo->update($question, $data);
     }
 }

@@ -30,4 +30,20 @@ class AnswerService extends BaseService
         })->toArray();
         return $this->answerRepo->insert($data);
     }
+
+    public function deleteAnswers($answerIds)
+    {
+        return $this->answerRepo->delete($answerIds);
+    }
+
+    public function updateAnswers($updateAnswers)
+    {
+        foreach ($updateAnswers as $answer) {
+            $data = [
+                "answer" => $answer['answer'],
+                "is_correct" => $answer['is_correct'],
+            ];
+            $this->answerRepo->updateById($answer['id'], $data);
+        }
+    }
 }
