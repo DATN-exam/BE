@@ -29,6 +29,7 @@ class SetQuestionRepository extends BaseRepository implements SetQuestionReposit
     {
         return $this->baseList($filters)
             ->where('teacher_id', $teacherId)
+            ->withCount('questions')
             ->paginate($filters['per_page'] ?? 15);
     }
 }

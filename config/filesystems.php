@@ -14,6 +14,7 @@ return [
     */
 
     'default' => env('FILESYSTEM_DISK', 'local'),
+    'trash' => env('FILESYSTEM_DISK_TRASH', 'trash'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
@@ -56,6 +57,13 @@ return [
             'throw' => false,
         ],
 
+        'trash' => [
+            'driver' => 'local',
+            'root' => storage_path('app/trash'),
+            'url' => env('APP_URL') . '/trash',
+            'visibility' => 'private',
+            'throw' => false,
+        ],
     ],
 
     /*

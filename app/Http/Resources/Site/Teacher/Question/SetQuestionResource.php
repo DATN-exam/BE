@@ -21,6 +21,7 @@ class SetQuestionResource extends JsonResource
             'status' => $this->status->name,
             'description' => $this->description,
             'note' => $this->note,
+            'quantity_question' => $this->whenHas('questions_count')
         ];
     }
 }

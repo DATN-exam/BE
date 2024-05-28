@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Site\Teacher\Question;
 
+use App\Enums\Question\QuestionLevel;
 use App\Enums\Question\QuestionStatus;
 use App\Enums\Question\QuestionType;
 use App\Rules\AnswersRule;
@@ -26,9 +27,9 @@ class QuestionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'question' => ['required', 'string', 'max:255'],
-            'score' => ['numeric', 'between:1,99'],
+            'question' => ['required', 'string'],
             'is_testing' => ['required', 'boolean'],
+            'level' => ['required', new InEnumRule(QuestionLevel::getKeys())],
             'status' => [
                 'required',
                 new InEnumRule(QuestionStatus::getKeys())
@@ -37,9 +38,12 @@ class QuestionRequest extends FormRequest
                 'required',
                 new InEnumRule(QuestionType::getKeys())
             ],
-            'answers' => ['required', 'array', 'min:1', new AnswersRule()],
-            'answers.*.answer' => ['required', 'string', 'max:255'],
-            'answers.*.is_correct' => ['required', 'boolean'],
+            'answers' => ['required', 'array', 'min:1'],
+            'answers.*.answer' => ['required', 'string', 'distinct', 'max:255'],
+            'answers.*.is_correct' => [
+                'required_if:type,' . QuestionType::MULTIPLE->name,
+                'boolean',
+            ],
         ];
     }
 }

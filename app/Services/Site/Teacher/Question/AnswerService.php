@@ -6,7 +6,8 @@ use App\Models\Answer;
 use App\Models\Question;
 use App\Repositories\Answer\AnswerRepositoryInterface;
 use App\Services\BaseService;
-
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class AnswerService extends BaseService
 {
@@ -21,9 +22,8 @@ class AnswerService extends BaseService
         $now = now();
         $data = collect($answers)->map(function ($answer) use ($question, $now) {
             return [
+                ...$answer,
                 'question_id' => $question->id,
-                'answer' => $answer['answer'],
-                'is_correct' => $answer['is_correct'],
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
@@ -31,18 +31,16 @@ class AnswerService extends BaseService
         return $this->answerRepo->insert($data);
     }
 
-    public function deleteAnswers($answerIds)
+    public function deleteAnswers(Question $question, $answersUpdate)
     {
-        return $this->answerRepo->delete($answerIds);
+        $answerUpdateIds = Arr::pluck($answersUpdate, 'id');
+        return $this->answerRepo->deleteAnswerNotUpdate($question, $answerUpdateIds);
     }
 
     public function updateAnswers($updateAnswers)
     {
         foreach ($updateAnswers as $answer) {
-            $data = [
-                "answer" => $answer['answer'],
-                "is_correct" => $answer['is_correct'],
-            ];
+            $data = Arr::except($answer, ['id']);
             $this->answerRepo->updateById($answer['id'], $data);
         }
     }

@@ -22,11 +22,11 @@ class QuestionController extends BaseApiController
 
     public function store(SetQuestion $setQuestion, QuestionRequest $rq)
     {
+        $question = $this->questionService->setRequestValidated($rq)->handleCreate($setQuestion);
+        return $this->sendResponse(
+            QuestionResource::make($question)
+        );
         try {
-            $question = $this->questionService->setRequestValidated($rq)->handleCreate($setQuestion);
-            return $this->sendResponse(
-                QuestionResource::make($question)
-            );
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();
@@ -60,8 +60,8 @@ class QuestionController extends BaseApiController
 
     public function update(SetQuestion $setQuestion, Question $question, QuestionUpdateRequest $rq)
     {
+        $this->questionService->setRequestValidated($rq)->handleUpdate($question);
         try {
-            $this->questionService->setRequestValidated($rq)->handleUpdate($question);
             return $this->sendResponse([
                 'message' => __('alert.update.success'),
             ]);

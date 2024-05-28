@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Site\Teacher\Question;
 
+use App\Enums\Question\QuestionLevel;
 use App\Enums\Question\QuestionStatus;
+use App\Enums\Question\QuestionType;
 use App\Rules\InEnumRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
@@ -27,20 +29,22 @@ class QuestionUpdateRequest extends FormRequest
     {
         $id = $this->route('question')->id;
         return [
-            'question' => ['required', 'string', 'max:255'],
-            // 'score' => ['numeric', 'between:1,99'],
+            'question' => ['required', 'string', 'min:10'],
             'is_testing' => ['required', 'boolean'],
+            'level' => ['required', new InEnumRule(QuestionLevel::getKeys())],
             'status' => [
                 'required',
                 new InEnumRule(QuestionStatus::getKeys())
             ],
-            // 'type' => [
-            //     'required',
-            //     new InEnumRule(QuestionType::getKeys())
-            // ],
+            'type' => [
+                'required',
+                new InEnumRule(QuestionType::getKeys())
+            ],
             'answers_add' => ['array'],
             'answers_add.*.answer' => ['required', 'string', 'max:255'],
-            'answers_add.*.is_correct' => ['required', 'boolean'],
+            'answers_add.*.is_correct' => [
+                'required_if:type,' . QuestionType::MULTIPLE->name, 'boolean',
+            ],
 
             'answers_update' => ['array'],
             'answers_update.*.answer' => ['required', 'string', 'max:255'],
@@ -49,10 +53,9 @@ class QuestionUpdateRequest extends FormRequest
                 'max:255',
                 'exists:answers,id,question_id,' . $id
             ],
-            'answers_update.*.is_correct' => ['required', 'boolean'],
-
-            'answers_delete' => ['array'],
-            'answers_delete.*' => ['distinct', 'exists:answers,id,question_id,' . $id]
+            'answers_update.*.is_correct' => [
+                'required_if:type,' . QuestionType::MULTIPLE->name, 'boolean'
+            ],
         ];
     }
 
@@ -62,9 +65,9 @@ class QuestionUpdateRequest extends FormRequest
             function (Validator $validator) {
                 $validated = $this->validated();
                 $answers = collect([...$validated['answers_update'], ...$validated['answers_add']]);
-                if($answers->unique('answer')->count()!== $answers->count()){
+                if ($answers->unique('answer')->count() !== $answers->count()) {
                     $validator->errors()->add(
-                        'answer',
+                        'answers',
                         __('alert.answer.duplicate')
                     );
                 }
