@@ -21,8 +21,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        DB::listen(function ($query) {
-            Log::info("SQL Query: {$query->sql} - Parameters: " . json_encode($query->bindings));
-        });
+        // DB::listen(function ($query) {
+        //     Log::info("SQL Query: {$query->sql} - Parameters: " . json_encode($query->bindings));
+        // });
     }
 }

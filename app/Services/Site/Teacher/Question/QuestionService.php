@@ -2,6 +2,7 @@
 
 namespace App\Services\Site\Teacher\Question;
 
+use App\Enums\Question\QuestionLevel;
 use App\Enums\Question\QuestionStatus;
 use App\Enums\Question\QuestionType;
 use App\Models\Question;
@@ -9,26 +10,30 @@ use App\Models\SetQuestion;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use App\Services\BaseService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Throwable;
+use Illuminate\Support\Str;
+
 
 class QuestionService extends BaseService
 {
     public function __construct(
         protected QuestionRepositoryInterface $questionRepo,
         protected AnswerService $answerSer,
+        protected ImgQuestionService $imgSer
     ) {
         //
     }
 
     public function handleCreate(SetQuestion $setQuestion)
     {
+        DB::beginTransaction();
+        $question = $this->create($setQuestion);
+        $this->answerSer->insert($this->data['answers'], $question);
+        $question->load(['answers', 'images']);
+        DB::commit();
+        return $question;
         try {
-            DB::beginTransaction();
-            $question = $this->create($setQuestion);
-            $this->answerSer->insert($this->data['answers'], $question);
-            $question->load('answers');
-            DB::commit();
-            return $question;
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
@@ -37,14 +42,29 @@ class QuestionService extends BaseService
 
     private function create(SetQuestion $setQuestion)
     {
-        return $this->questionRepo->create([
+
+        $questionHmtl = $this->data["question"];
+        $data = replaceImgTagsWithKey($questionHmtl);
+        $questionHmtl = $data['html'];
+        $mapping = $data['mapping'];
+        $question =  $this->questionRepo->create([
             "set_question_id" => $setQuestion->id,
-            "question" => $this->data["question"],
-            "score" => $this->data["score"],
+            "question" => $questionHmtl,
+            "score" => 10,
             "is_testing" => $this->data["is_testing"],
             "status" => QuestionStatus::getValueByKey($this->data["status"]),
             "type" => QuestionType::getValueByKey($this->data["type"]),
+            "level"=>QuestionLevel::getValueByKey($this->data["level"])
         ]);
+        if (!empty($mapping)) {
+            $newImages = $this->imgSer->handleSaveImages($question, $mapping);
+            foreach ($newImages as $key => $image) {
+                $questionHmtl = Str::replace($key, $image->id, $questionHmtl);
+            }
+        }
+        $question->question = $questionHmtl;
+        $question->save();
+        return $question;
     }
 
     public function paginate(SetQuestion $setQuestion)
@@ -55,32 +75,52 @@ class QuestionService extends BaseService
     public function handleUpdate(Question $question)
     {
         DB::beginTransaction();
-        try {
-            $this->update($question);
-            if (!empty($this->data['answers_delete'])) {
-                $this->answerSer->deleteAnswers($this->data['answers_delete']);
-            }
-            if (!empty($this->data['answers_update'])) {
-                $this->answerSer->updateAnswers($this->data['answers_update']);
-            }
-            if (!empty($this->data['answers_add'])) {
-                $this->answerSer->insert($this->data['answers_add'], $question);
-            }
-            DB::commit();
-            return;
-        } catch (Throwable $e) {
-            DB::rollBack();
-            return throw $e;
+        $this->update($question);
+        $this->answerSer->deleteAnswers($question, $this->data['answers_update']);
+        if (!empty($this->data['answers_update'])) {
+            $this->answerSer->updateAnswers($this->data['answers_update']);
         }
+        if (!empty($this->data['answers_add'])) {
+            $this->answerSer->insert($this->data['answers_add'], $question);
+        }
+        DB::commit();
+        return;
+        // try {
+        // } catch (Throwable $e) {
+        //     DB::rollBack();
+        //     return throw $e;
+        // }
     }
 
     private function update(Question $question)
     {
+        $questionHmtl = $this->handleImageQuestion($question);
         $data = [
-            "question" => $this->data['question'],
+            "question" => $questionHmtl,
             "is_testing" => $this->data['is_testing'],
             "status" => QuestionStatus::getValueByKey($this->data['status']),
+            "type" => QuestionType::getValueByKey($this->data['type']),
+            "level" => QuestionLevel::getValueByKey($this->data['level']),
         ];
         return $this->questionRepo->update($question, $data);
+    }
+
+    private function handleImageQuestion(Question $question)
+    {
+        $questionHmtl = $this->data['question'];
+        $data = getImagesQuestion($questionHmtl);
+        $images = $data['images'];
+        $this->imgSer->handelDeleteImages($question, $images);
+        $questionHmtl = $data['html'];
+        $data = replaceImgTagsWithKey($questionHmtl);
+        $questionHmtl = $data['html'];
+        $mapping = $data['mapping'];
+        if (!empty($mapping)) {
+            $newImages = $this->imgSer->handleSaveImages($question, $mapping);
+            foreach ($newImages as $key => $image) {
+                $questionHmtl = Str::replace($key, $image->id, $questionHmtl);
+            }
+        }
+        return $questionHmtl;
     }
 }
