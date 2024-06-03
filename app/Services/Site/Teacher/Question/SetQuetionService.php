@@ -41,4 +41,10 @@ class SetQuetionService extends BaseService
         $teacher = auth('api')->user();
         return $this->setQuestionRepo->paginateOfTeacher($teacher->id, $this->data);
     }
+
+    public function getSetQuestionReady()
+    {
+        $teacher = auth('api')->user();
+        return $this->setQuestionRepo->getSetQuestionReady($teacher);
+    }
 }

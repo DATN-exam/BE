@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Site\Teacher\Classroom\ClassroomController;
 use App\Http\Controllers\Site\Teacher\Classroom\ClassroomKeyController;
+use App\Http\Controllers\Site\Teacher\Exam\ExamController;
 use App\Http\Controllers\Site\Teacher\Question\SetQuestionController;
 use App\Http\Controllers\Site\Teacher\Question\QuestionController;
 use App\Http\Controllers\Site\Teacher\StudentController;
@@ -39,12 +40,19 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
                 Route::post('/{student}/active', [StudentController::class, 'active'])->name('active');
             });
         });
+
+        //Exam
+        Route::group(['prefix' => '{classroom}/exams', 'as' => 'exams.'], function () {
+            Route::post('/', [ExamController::class, 'store'])->name('store');
+            Route::get('/', [ExamController::class, 'index'])->name('index');
+        });
     });
 });
 
 //Set question
 Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () {
     Route::get('/', [SetQuestionController::class, 'index'])->name('index');
+    Route::get('/set-question-ready', [SetQuestionController::class, 'setQuestionReady'])->name('setQuestionReady');
     Route::get('/{setQuestion}', [SetQuestionController::class, 'show'])->name('show');
     Route::post('/', [SetQuestionController::class, 'store'])->name('store');
 

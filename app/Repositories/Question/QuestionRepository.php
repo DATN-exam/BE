@@ -2,8 +2,10 @@
 
 namespace App\Repositories\Question;
 
+use App\Enums\Question\QuestionLevel;
 use App\Enums\Question\QuestionStatus;
 use App\Enums\Question\QuestionType;
+use App\Models\Exam;
 use App\Models\Question;
 use App\Models\SetQuestion;
 use App\Repositories\BaseRepository;
@@ -34,5 +36,34 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
             ->with(['answers'])
             ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'ASC')
             ->paginate($filters['per_page'] ?? 10);
+    }
+    public function getQuestionExamRandom(Exam $exam)
+    {
+        $questionHard = $this->model
+            ->where('set_question_id', $exam->set_question_id)
+            ->where('status', QuestionStatus::ACTIVE)
+            ->where('is_testing', false)
+            ->where('level', QuestionLevel::HARD)
+            ->inRandomOrder()
+            ->take($exam->number_question_hard)
+            ->get();
+        $questionMedium = $this->model
+            ->where('set_question_id', $exam->set_question_id)
+            ->where('status', QuestionStatus::ACTIVE)
+            ->where('is_testing', false)
+            ->where('level', QuestionLevel::MEDIUM)
+            ->inRandomOrder()
+            ->take($exam->number_question_medium)
+            ->get();
+        $questionEasy = $this->model
+            ->where('set_question_id', $exam->set_question_id)
+            ->where('status', QuestionStatus::ACTIVE)
+            ->where('is_testing', false)
+            ->where('level', QuestionLevel::EASY)
+            ->inRandomOrder()
+            ->take($exam->number_question_easy)
+            ->get();
+
+        return $questionHard->concat($questionMedium)->concat($questionEasy);
     }
 }

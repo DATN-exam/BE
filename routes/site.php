@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Site\AuthController;
 use App\Http\Controllers\Site\Student\ClassroomController;
+use App\Http\Controllers\Site\Student\ExamController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
@@ -24,5 +25,12 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => 'auth:api', 'prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
         Route::get('join/{classroomKey}', [ClassroomController::class, 'join'])->name('join');
         Route::get('/', [ClassroomController::class, 'index'])->name('index');
+        Route::get('/{classroom}', [ClassroomController::class, 'show'])->name('show');
+
+        Route::group(['prefix' => '{classroom}/exams', 'as' => 'exams.'], function () {
+            Route::get('/', [ExamController::class, 'index'])->name('index');
+            Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
+            Route::post('/{exam}/start', [ExamController::class, 'start'])->name('start');
+        });
     });
 });

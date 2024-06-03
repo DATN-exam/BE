@@ -10,6 +10,12 @@ use App\Repositories\Classroom\ClassroomRepository;
 use App\Repositories\Classroom\ClassroomRepositoryInterface;
 use App\Repositories\Classroom\ClassroomStudentRepository;
 use App\Repositories\Classroom\ClassroomStudentRepositoryInterface;
+use App\Repositories\Exam\ExamRepository;
+use App\Repositories\Exam\ExamRepositoryInterface;
+use App\Repositories\ExamAnswer\ExamAnswerRepository;
+use App\Repositories\ExamAnswer\ExamAnswerRepositoryInterface;
+use App\Repositories\ExamHistory\ExamHistoryRepository;
+use App\Repositories\ExamHistory\ExamHistoryRepositoryInterface;
 use App\Repositories\Image\ImageRepository;
 use App\Repositories\Image\ImageRepositoryInterface;
 use App\Repositories\Question\QuestionRepository;
@@ -38,6 +44,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(QuestionRepositoryInterface::class, QuestionRepository::class);
         $this->app->bind(AnswerRepositoryInterface::class, AnswerRepository::class);
         $this->app->bind(ImageRepositoryInterface::class, ImageRepository::class);
+        $this->app->bind(ExamRepositoryInterface::class, ExamRepository::class);
+        $this->app->bind(ExamHistoryRepositoryInterface::class, ExamHistoryRepository::class);
+        $this->app->bind(ExamAnswerRepositoryInterface::class, ExamAnswerRepository::class);
     }
 
     /**
