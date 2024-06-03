@@ -18,10 +18,13 @@ class SetQuestionResource extends JsonResource
             'id' => $this->id,
             'teacher_id' => $this->teacher_id,
             'title' => $this->title,
+            'name' => $this->title,
             'status' => $this->status->name,
             'description' => $this->description,
             'note' => $this->note,
-            'quantity_question' => $this->whenHas('questions_count')
+            'question_hard_count' => $this->whenHas('question_hard_count'),
+            'question_medium_count' => $this->whenHas('question_medium_count'),
+            'question_easy_count' => $this->whenHas('question_easy_count'),
         ];
     }
 }

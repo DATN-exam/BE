@@ -69,4 +69,17 @@ class SetQuestionController extends BaseApiController
             return $this->sendError();
         }
     }
+
+    public function setQuestionReady()
+    {
+        try {
+            $setQuestions = $this->setQuestionSer->getSetQuestionReady();
+            return $this->sendResponse(
+                SetQuestionResource::collection($setQuestions)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
 }

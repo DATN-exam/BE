@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site\Student;
 
 use App\Http\Controllers\BaseApiController;
 use App\Http\Resources\Site\ClassroomResource;
+use App\Models\Classroom;
 use App\Models\ClassroomKey;
 use App\Services\Site\Student\ClassroomService;
 use Illuminate\Http\Request;
@@ -37,6 +38,18 @@ class ClassroomController extends BaseApiController
             $classrooms = $this->classroomSer->setRequest($rq)->paginate();
             return $this->sendResourceResponse(
                 ClassroomResource::collection($classrooms)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function show(Classroom $classroom)
+    {
+        try {
+            return $this->sendResponse(
+                ClassroomResource::make($classroom)
             );
         } catch (Throwable $e) {
             Log::error($e);
