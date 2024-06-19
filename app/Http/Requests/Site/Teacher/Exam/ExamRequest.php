@@ -23,6 +23,7 @@ class ExamRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'is_show_result' => ['required', 'boolean'],
             'number_question_easy' => ['numeric'],
             'number_question_medium' => ['numeric'],
             'number_question_hard' => ['numeric'],

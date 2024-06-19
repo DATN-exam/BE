@@ -1,13 +1,66 @@
 <?php
 
+use App\Enums\Exam\ExamStatus;
 use App\Models\Image;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Support\Str;
 
 if (!function_exists('getToday')) {
     function getToday()
     {
         return Carbon::now()->format(config('define.date_format'));
+    }
+}
+
+if (!function_exists('remainingTime')) {
+    function remainingTime($startTime, $workingTime)
+    {
+        $startTime = Carbon::parse($startTime);
+        list($hours, $minutes, $seconds) = sscanf($workingTime, "%d:%d:%d");
+        $workingInterval = CarbonInterval::hours($hours)
+            ->minutes($minutes)
+            ->seconds($seconds);
+        $endTime = $startTime->add($workingInterval);
+        $now = Carbon::now();
+        if ($endTime->lt($now)) {
+            return 0;
+        }
+        return $endTime->diffInSeconds($now);
+    }
+}
+
+if (!function_exists('getTimeSubmit')) {
+    function getTimeSubmit($startTime, $workingTime)
+    {
+        $startTime = Carbon::parse($startTime);
+        list($hours, $minutes, $seconds) = sscanf($workingTime, "%d:%d:%d");
+        $workingInterval = CarbonInterval::hours($hours)
+            ->minutes($minutes)
+            ->seconds($seconds);
+        $endTime = $startTime->add($workingInterval);
+        $now = Carbon::now();
+        if ($endTime->lt($now)) {
+            return $endTime;
+        }
+        return $now;
+    }
+}
+
+
+if (!function_exists('checkStatusExam')) {
+    function checkStatusExam($startDate, $endDate)
+    {
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+        $now = Carbon::now();
+        if ($now->lt($startDate)) {
+            return ExamStatus::UPCOMING;
+        } elseif ($now->gt($endDate)) {
+            return ExamStatus::HAPPENED;
+        } else {
+            return ExamStatus::HAPPENING;
+        }
     }
 }
 

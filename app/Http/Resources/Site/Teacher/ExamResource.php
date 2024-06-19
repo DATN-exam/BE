@@ -18,9 +18,12 @@ class ExamResource extends JsonResource
         return [
             'id' => $this->id,
             'set_question' => SetQuestionResource::make($this->whenLoaded('setQuestion')),
+            'set_question_id' => $this->set_question_id,
+            'note' => $this->note,
             'name' => $this->name,
             'working_time' => $this->working_time,
             'start_date' => $this->start_date,
+            'is_show_result' => $this->is_show_result,
             'end_date' => $this->end_date,
             'number_question_hard' => $this->number_question_hard,
             'number_question_medium' => $this->number_question_medium,

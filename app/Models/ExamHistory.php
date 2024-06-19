@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ExamHistory\ExamHistoryStatus;
 use App\Enums\ExamHistory\ExamHistoryType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -18,13 +19,16 @@ class ExamHistory extends Model
         'is_submit',
         'type',
         'total_score',
+        'status'
     ];
 
     protected $casts = [
         'type' => ExamHistoryType::class,
+        'status' => ExamHistoryStatus::class,
+        'is_submit' => 'boolean',
     ];
 
-    public function  examAnswers()
+    public function examAnswers()
     {
         return $this->hasMany(ExamAnwser::class, 'exam_history_id', 'id');
     }

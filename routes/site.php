@@ -31,6 +31,12 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('/', [ExamController::class, 'index'])->name('index');
             Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
             Route::post('/{exam}/start', [ExamController::class, 'start'])->name('start');
+            Route::get('/{exam}/get-current', [ExamController::class, 'getCurrent'])->name('getCurrent');
+            Route::get('/{exam}/history/{examHistory}', [ExamController::class, 'getExamHistoryDetail'])->name('getCurrentDetail');
         });
+    });
+    Route::group(['prefix' => 'exams', 'as' => 'exams.'], function () {
+        Route::post('{examHistory}/change-answer/{examAnwser}', [ExamController::class, 'changeAnswer'])->name('changeAnswer');
+        Route::post('{examHistory}/submit', [ExamController::class, 'submit'])->name('submit');
     });
 });

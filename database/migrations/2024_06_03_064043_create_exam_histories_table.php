@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('exam_histories', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedSmallInteger('status')->default(1);
             $table->unsignedInteger('exam_id');
             $table->unsignedInteger('student_id');
-            $table->dateTime('start_time');
+            $table->dateTime('start_time')->default(now());
             $table->unsignedSmallInteger('type')->default(1);
             $table->dateTime('submit_time')->nullable();
             $table->boolean('is_submit')->default(false);

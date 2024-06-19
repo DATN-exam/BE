@@ -17,7 +17,9 @@ class ExamAnwser extends Model
         'score',
         'is_correct',
     ];
-
+    protected $casts = [
+        'is_correct' => 'boolean',
+    ];
     public function examHistory()
     {
         return $this->belongsTo(ExamHistory::class,'exam_history_id','id');

@@ -18,7 +18,7 @@ class AnswerResource extends JsonResource
             'id' => $this->id,
             'question_id' => $this->question_id,
             'answer' => $this->answer,
-            'is_correct' => $this->is_correct,
+            'is_correct' => $this->whenNotNull($this->is_correct),
         ];
     }
 }
