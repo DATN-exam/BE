@@ -45,6 +45,8 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
         Route::group(['prefix' => '{classroom}/exams', 'as' => 'exams.'], function () {
             Route::post('/', [ExamController::class, 'store'])->name('store');
             Route::get('/', [ExamController::class, 'index'])->name('index');
+            Route::post('/{exam}', [ExamController::class, 'update'])->name('update');
+            Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
         });
     });
 });

@@ -15,11 +15,13 @@ class ExamAnswerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'=>$this->id,
-            'exam_history_id'=>$this->exam_history_id,
-            'question_id'=>$this->question_id,
-            'answer_text'=>$this->answer_text,
-            'score'=>$this->score,
+            'id' => $this->id,
+            'exam_history_id' => $this->exam_history_id,
+            'question_id' => $this->question_id,
+            'is_correct' => $this->is_correct,
+            'answer_text' => $this->answer_text,
+            'answer_id' => $this->answer_id,
+            'score' => $this->score,
             'question' => QuestionResource::make($this->whenLoaded('question')),
         ];
     }

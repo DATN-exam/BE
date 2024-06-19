@@ -24,7 +24,7 @@ class QuestionResource extends JsonResource
             'score' => $this->score,
             'img' => $this->img,
             'is_testing' => $this->is_testing,
-            'answers' => $this->whenLoaded('answers')
+            'answers' =>AnswerResource::collection($this->whenLoaded('answers'))
         ];
     }
 }

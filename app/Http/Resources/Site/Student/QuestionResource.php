@@ -16,7 +16,7 @@ class QuestionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'question' => $this->question,
+            'question' => getQuestionHtml($this->question),
             'type' => $this->type->name,
             'level' => $this->level->name,
             'answers' => AnswerResource::collection($this->whenLoaded('answers'))
