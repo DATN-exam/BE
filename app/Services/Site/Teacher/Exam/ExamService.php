@@ -6,12 +6,14 @@ use App\Models\Classroom;
 use App\Models\Exam;
 use App\Repositories\Exam\ExamRepositoryInterface;
 use App\Services\BaseService;
-
+use App\Services\ExcelService;
 
 class ExamService extends BaseService
 {
-    public function __construct(protected ExamRepositoryInterface $examRepo)
-    {
+    public function __construct(
+        protected ExamRepositoryInterface $examRepo,
+        protected ExcelService $excelSer
+    ) {
         //
     }
     public function create(Classroom $classRoom)
@@ -32,5 +34,15 @@ class ExamService extends BaseService
     public function destroy(Exam $exam)
     {
         return $this->examRepo->delete([$exam->id]);
+    }
+
+    public function getTop(Exam $exam)
+    {
+        return $this->examRepo->getTop($exam);
+    }
+    public function getTopExport(Exam $exam)
+    {
+        $data = $this->examRepo->getTop($exam);
+        return $this->excelSer->exportMotos($data);
     }
 }

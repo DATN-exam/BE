@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Site;
 
+use App\Enums\TeacherRegistration\TeacherRegistrationStatus;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +15,10 @@ class StudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $check = $this->teacherRegistrations()
+            ->where('user_id', $this->id)
+            ->whereIn('status', [TeacherRegistrationStatus::ACCEPT, TeacherRegistrationStatus::WAIT])
+            ->exists();
         return [
             'id' => $this->id,
             'email' => $this->email,
@@ -26,6 +31,7 @@ class StudentResource extends JsonResource
             'address' => $this->address,
             'avatar' => $this->avatar,
             'description' => $this->description,
+            'has_teacher_registration' => $check
         ];
     }
 }

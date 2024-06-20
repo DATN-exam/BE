@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Site\Teacher\Exam;
 
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Teacher\Exam\ExamRequest;
+use App\Http\Resources\Site\Teacher\ExamHistoryResource;
 use App\Http\Resources\Site\Teacher\ExamResource;
 use App\Models\Classroom;
 use App\Models\Exam;
@@ -65,6 +66,30 @@ class ExamController extends BaseApiController
             return $this->sendResponse([
                 'message' => __('alert.update.success'),
             ]);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function getTop(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->getTop($exam);
+            return $this->sendResponse(
+                ExamHistoryResource::collection($data)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function getTopExport(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->getTopExport($exam);
+            return $this->sendCsvResponse($data, 'ranking.xlsx');
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();

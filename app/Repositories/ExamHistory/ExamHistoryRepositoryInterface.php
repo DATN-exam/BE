@@ -9,4 +9,6 @@ use App\Repositories\RepositoryInterface;
 interface ExamHistoryRepositoryInterface extends RepositoryInterface
 {
     public function getCurrentTest(User $student, Exam $exam);
+
+    public function getExamHistoryExpried();
 }

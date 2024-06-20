@@ -30,6 +30,27 @@ if (!function_exists('remainingTime')) {
     }
 }
 
+if (!function_exists('calculateTimeAgo')) {
+    function calculateTimeAgo($startTime)
+    {
+        $parsedDate = Carbon::parse($startTime);
+        $currentDate = Carbon::now();
+        $diffInSeconds = $parsedDate->diffInSeconds($currentDate);
+        if ($diffInSeconds < 60) {
+            return "$diffInSeconds giây trước";
+        } elseif ($diffInSeconds < 3600) {
+            $diffInMinutes = floor($diffInSeconds / 60);
+            return "$diffInMinutes phút trước";
+        } elseif ($diffInSeconds < 86400) {
+            $diffInHours = floor($diffInSeconds / 3600);
+            return "$diffInHours giờ trước";
+        } else {
+            $diffInDays = floor($diffInSeconds / 86400);
+            return "$diffInDays ngày trước";
+        }
+    }
+}
+
 if (!function_exists('getTimeSubmit')) {
     function getTimeSubmit($startTime, $workingTime)
     {

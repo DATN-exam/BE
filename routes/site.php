@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Site\AuthController;
+use App\Http\Controllers\Site\NotificationController;
 use App\Http\Controllers\Site\Student\ClassroomController;
 use App\Http\Controllers\Site\Student\ExamController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +20,10 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
 Route::group(['middleware' => 'auth:api', 'prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('profile', [AuthController::class, 'profile'])->name('profile');
+
+    Route::group(['prefix' => 'notifications', 'as' => 'notifications.'], function () {
+        Route::get('/', [NotificationController::class, 'index'])->name('index');
+    });
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
