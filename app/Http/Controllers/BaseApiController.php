@@ -36,7 +36,7 @@ class BaseApiController extends Controller
 
     public function sendCsvResponse($file, $nameFile): BinaryFileResponse
     {
-        return Excel::download($file, $nameFile, \Maatwebsite\Excel\Excel::CSV, [
+        return Excel::download($file, $nameFile, \Maatwebsite\Excel\Excel::XLSX, [
             'Content-Type' => 'text/csv',
         ]);
     }

@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class ConfirmTeacherNotification extends Notification implements ShouldQueue
 {
@@ -43,8 +44,13 @@ class ConfirmTeacherNotification extends Notification implements ShouldQueue
     public function broadcastOn()
     {
         return [
-            new PrivateChannel('App.Models.User.{id}')
+            new PrivateChannel("App.Models.User.{$this->registration->user_id}")
         ];
+    }
+
+    public function broadcastAs()
+    {
+        return 'user-notification';
     }
 
     private function mailAccept()
@@ -67,7 +73,8 @@ class ConfirmTeacherNotification extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            "message" => $this->registration->status === TeacherRegistrationStatus::DENY ? "Đơn đăng kí giáo viên của bạn đã bị từ chối" : "Đơn đăng kí giáo viên của bạn đã được chấp nhận",
+            "url" => $this->registration->status === TeacherRegistrationStatus::DENY ? null : config('define.url_teacher'),
         ];
     }
 }

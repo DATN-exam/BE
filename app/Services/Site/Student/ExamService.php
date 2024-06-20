@@ -62,7 +62,7 @@ class ExamService extends BaseService
         }
         $this->examAnserRepo->insert($data);
         $examHistory->refresh();
-        $examHistory->load(['exam']);
+        $examHistory->load(['exam', 'examAnswers', 'examAnswers.question', 'examAnswers.question.answers', 'exam.setQuestion']);
         DB::commit();
         return $examHistory;
     }
