@@ -46,6 +46,16 @@ class QuestionController extends BaseApiController
         }
     }
 
+    public function exportWord(SetQuestion $setQuestion, Request $rq)
+    {
+        try {
+            return $this->questionService->setRequest($rq)->exportWord($setQuestion);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
     public function show(SetQuestion $setQuestion, Question $question)
     {
         try {

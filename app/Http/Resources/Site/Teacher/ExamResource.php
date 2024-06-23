@@ -19,6 +19,7 @@ class ExamResource extends JsonResource
             'id' => $this->id,
             'set_question' => SetQuestionResource::make($this->whenLoaded('setQuestion')),
             'set_question_id' => $this->set_question_id,
+            'status' => $this->status->name,
             'note' => $this->note,
             'name' => $this->name,
             'working_time' => $this->working_time,

@@ -37,6 +37,28 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
             ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'ASC')
             ->paginate($filters['per_page'] ?? 10);
     }
+
+    public function exportWord(SetQuestion $setQuestion, $filters)
+    {
+        return $this->model
+            ->where('set_question_id', $setQuestion->id)
+            ->when(isset($filters['question']), function ($query) use ($filters) {
+                return $query->where('question', 'like', '%' . $filters['question'] . '%');
+            })
+            ->when(isset($filters['status']), function ($query) use ($filters) {
+                return $query->where('status', QuestionStatus::getValueByKey($filters['status']));
+            })
+            ->when(isset($filters['type']), function ($query) use ($filters) {
+                return $query->where('type', QuestionType::getValueByKey($filters['type']));
+            })
+            ->when(isset($filters['is_testing']), function ($query) use ($filters) {
+                return $query->where('is_testing', $filters['is_testing']);
+            })
+            ->with(['answers'])
+            ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'ASC')
+            ->get();
+    }
+
     public function getQuestionExamRandom(Exam $exam, $typeQuestion)
     {
         $questionHard = $this->model
