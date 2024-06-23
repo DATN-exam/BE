@@ -69,6 +69,7 @@ Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () 
             Route::post('/', [QuestionController::class, 'store'])->name('store');
             Route::put('/', [QuestionController::class, 'update'])->name('update');
             Route::get('/', [QuestionController::class, 'index'])->name('index');
+            Route::get('/export-word', [QuestionController::class, 'exportWord'])->name('exportWord');
             Route::get('/{question}', [QuestionController::class, 'show'])->name('show');
             Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
         });

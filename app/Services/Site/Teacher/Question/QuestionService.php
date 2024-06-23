@@ -9,6 +9,7 @@ use App\Models\Question;
 use App\Models\SetQuestion;
 use App\Repositories\Question\QuestionRepositoryInterface;
 use App\Services\BaseService;
+use App\Services\WordService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -20,7 +21,8 @@ class QuestionService extends BaseService
     public function __construct(
         protected QuestionRepositoryInterface $questionRepo,
         protected AnswerService $answerSer,
-        protected ImgQuestionService $imgSer
+        protected ImgQuestionService $imgSer,
+        protected WordService $wordService
     ) {
         //
     }
@@ -54,7 +56,7 @@ class QuestionService extends BaseService
             "is_testing" => $this->data["is_testing"],
             "status" => QuestionStatus::getValueByKey($this->data["status"]),
             "type" => QuestionType::getValueByKey($this->data["type"]),
-            "level"=>QuestionLevel::getValueByKey($this->data["level"])
+            "level" => QuestionLevel::getValueByKey($this->data["level"])
         ]);
         if (!empty($mapping)) {
             $newImages = $this->imgSer->handleSaveImages($question, $mapping);
@@ -72,24 +74,30 @@ class QuestionService extends BaseService
         return $this->questionRepo->paginate($setQuestion, $this->data);
     }
 
+    public function exportWord(SetQuestion $setQuestion)
+    {
+        $questions = $this->questionRepo->exportWord($setQuestion, $this->data);
+        return $this->wordService->exportQuestions($questions, $setQuestion);
+    }
+
     public function handleUpdate(Question $question)
     {
-        DB::beginTransaction();
-        $this->update($question);
-        $this->answerSer->deleteAnswers($question, $this->data['answers_update']);
-        if (!empty($this->data['answers_update'])) {
-            $this->answerSer->updateAnswers($this->data['answers_update']);
+        try {
+            DB::beginTransaction();
+            $this->update($question);
+            $this->answerSer->deleteAnswers($question, $this->data['answers_update']);
+            if (!empty($this->data['answers_update'])) {
+                $this->answerSer->updateAnswers($this->data['answers_update']);
+            }
+            if (!empty($this->data['answers_add'])) {
+                $this->answerSer->insert($this->data['answers_add'], $question);
+            }
+            DB::commit();
+            return;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return throw $e;
         }
-        if (!empty($this->data['answers_add'])) {
-            $this->answerSer->insert($this->data['answers_add'], $question);
-        }
-        DB::commit();
-        return;
-        // try {
-        // } catch (Throwable $e) {
-        //     DB::rollBack();
-        //     return throw $e;
-        // }
     }
 
     private function update(Question $question)
