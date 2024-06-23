@@ -13,4 +13,6 @@ interface ExamRepositoryInterface extends RepositoryInterface
     public function allOfClassroom(Classroom $classroom);
 
     public function getTop(Exam $exam);
+
+    public function analysis(Exam $exam);
 }

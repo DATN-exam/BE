@@ -29,6 +29,7 @@ class ExamRepository extends BaseRepository implements ExamRepositoryInterface
             ->orderBy('created_at', 'desc')
             ->get();
     }
+
     public function getTop(Exam $exam)
     {
         return $exam->examHistories()
@@ -42,5 +43,22 @@ class ExamRepository extends BaseRepository implements ExamRepositoryInterface
             ->orderBy('time_taken')
             ->with('student')
             ->get();
+    }
+
+    public function analysis(Exam $exam)
+    {
+        $statisis = $exam->examHistories()
+            ->select(
+                DB::raw('COUNT(DISTINCT student_id) as number_student_join'),
+                DB::raw('AVG(total_score) as average_score'),
+                DB::raw('MAX(total_score) as max_score'),
+                DB::raw("TIME_FORMAT(SEC_TO_TIME(AVG(TIMESTAMPDIFF(SECOND, start_time, submit_time))), '%H:%i:%s') as average_time_taken")
+            )
+            ->where('is_submit', true)
+            ->where('type', ExamHistoryType::TEST)
+            ->first()
+            ->toArray();
+        $totalStudent = $exam->classroom->students()->count();
+        return [...$statisis, "total_student" => $totalStudent];
     }
 }

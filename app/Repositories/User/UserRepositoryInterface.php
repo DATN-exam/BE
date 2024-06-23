@@ -18,4 +18,6 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function paginateStudentOfClassroom($filters, $classroom);
 
     public function exportStudent($filters);
+
+    public function analysisTeacher(User $teacher);
 }

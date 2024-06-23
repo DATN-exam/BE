@@ -95,4 +95,15 @@ class ExamController extends BaseApiController
             return $this->sendError();
         }
     }
+
+    public function analysis(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->analysis($exam);
+            return $this->sendResponse($data);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
 }

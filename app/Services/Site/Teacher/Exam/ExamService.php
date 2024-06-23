@@ -40,9 +40,15 @@ class ExamService extends BaseService
     {
         return $this->examRepo->getTop($exam);
     }
+
     public function getTopExport(Exam $exam)
     {
         $data = $this->examRepo->getTop($exam);
         return $this->excelSer->exportMotos($data);
+    }
+
+    public function analysis(Exam $exam)
+    {
+        return $this->examRepo->analysis($exam);
     }
 }

@@ -37,12 +37,12 @@ class QuestionRepository extends BaseRepository implements QuestionRepositoryInt
             ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'ASC')
             ->paginate($filters['per_page'] ?? 10);
     }
-    public function getQuestionExamRandom(Exam $exam)
+    public function getQuestionExamRandom(Exam $exam, $typeQuestion)
     {
         $questionHard = $this->model
             ->where('set_question_id', $exam->set_question_id)
             ->where('status', QuestionStatus::ACTIVE)
-            ->where('is_testing', false)
+            ->where('is_testing', $typeQuestion)
             ->where('level', QuestionLevel::HARD)
             ->inRandomOrder()
             ->take($exam->number_question_hard)

@@ -2,11 +2,14 @@
 
 namespace App\Repositories\User;
 
+use App\Enums\Classroom\ClassroomStatus;
 use App\Enums\Classroom\ClassroomStudentStatus;
+use App\Enums\Question\SetQuestionStatus;
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
 use App\Models\User;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
@@ -100,5 +103,28 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             })
             ->orderBy($filters['sort_column'] ?? 'id', $filters['sort_type'] ?? 'DESC')
             ->paginate($filters['per_page'] ?? 15);
+    }
+
+    //teacher
+    public function analysisTeacher(User $teacher)
+    {
+        return $this->model->where('id', $teacher->id)
+            ->with(['classrooms' => function ($query) {
+                return $query->select('classrooms.id', 'classrooms.name')->withCount('students');
+            }])
+            ->with(['setQuestion' => function ($query) {
+                return $query->select('set_questions.id', 'set_questions.title', 'set_questions.teacher_id')->withCount('questions');
+            }])
+            ->withCount([
+                'classrooms',
+                'setQuestion',
+                'classrooms as classroom_active_count' => function ($query) {
+                    $query->where('classrooms.status', ClassroomStatus::ACTIVE);
+                },
+                'setQuestion as set_question_active_count' => function ($query) {
+                    $query->where('set_questions.status', SetQuestionStatus::ACTIVE);
+                },
+            ])
+            ->first();
     }
 }
