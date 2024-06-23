@@ -19,6 +19,7 @@ class ExamHistoryResource extends JsonResource
         return [
             'id' => $this->id,
             'exam_id' => $this->exam_id,
+            'status' => $this->status->name,
             'exam' => ExamResource::make($this->whenLoaded('exam')),
             'student' => StudentResource::make($this->whenLoaded('student')),
             'time_taken' => $this->whenHas('time_taken'),
