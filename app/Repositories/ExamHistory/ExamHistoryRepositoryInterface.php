@@ -11,4 +11,6 @@ interface ExamHistoryRepositoryInterface extends RepositoryInterface
     public function getCurrentTest(User $student, Exam $exam);
 
     public function getExamHistoryExpried();
+
+    public function getCurrentExperiment(User $student, Exam $exam);
 }

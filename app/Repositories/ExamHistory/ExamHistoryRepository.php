@@ -3,6 +3,7 @@
 namespace App\Repositories\ExamHistory;
 
 use App\Enums\ExamHistory\ExamHistoryStatus;
+use App\Enums\ExamHistory\ExamHistoryType;
 use App\Models\Exam;
 use App\Models\ExamHistory;
 use App\Models\User;
@@ -21,7 +22,16 @@ class ExamHistoryRepository extends BaseRepository implements ExamHistoryReposit
         return $this->model
             ->where('student_id', $student->id)
             ->where('exam_id', $exam->id)
-            ->where('status', ExamHistoryStatus::ACTIVE)
+            ->where('type', ExamHistoryType::TEST)
+            ->first();
+    }
+
+    public function getCurrentExperiment(User $student, Exam $exam)
+    {
+        return $this->model
+            ->where('student_id', $student->id)
+            ->where('exam_id', $exam->id)
+            ->where('type', ExamHistoryType::EXPERIMENT)
             ->first();
     }
 

@@ -24,6 +24,7 @@ class ExamHistory extends Model
 
     protected $casts = [
         'type' => ExamHistoryType::class,
+        'status' => ExamHistoryStatus::class,
         'is_submit' => 'boolean',
     ];
 

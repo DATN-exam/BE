@@ -34,11 +34,11 @@ class ExamService extends BaseService
         return $this->examRepo->allOfClassroom($classroom);
     }
 
-    public function start(Exam $exam)
+    public function start(Exam $exam, $type = ExamHistoryType::TEST)
     {
         $student = auth('api')->user();
         $current = $this->examHistoryRepo->getCurrentTest($student, $exam);
-        if ($current) {
+        if ($current && $type == ExamHistoryType::TEST) {
             return throw new \Exception(__('alert.classroom.start.exist'));
         }
         DB::beginTransaction();
@@ -47,7 +47,7 @@ class ExamService extends BaseService
             'status' => ExamHistoryStatus::ACTIVE,
             'student_id' => $student->id,
             'start_time' => Carbon::now(),
-            'type' => ExamHistoryType::TEST
+            'type' => $type
         ]);
         $questions = $this->questionRepo->getQuestionExamRandom($exam)->toArray();
         $data = [];
@@ -71,6 +71,12 @@ class ExamService extends BaseService
     {
         $student = auth('api')->user();
         return $this->examHistoryRepo->getCurrentTest($student, $exam);
+    }
+
+    public function getCurrentExperiment(Exam $exam)
+    {
+        $student = auth('api')->user();
+        return $this->examHistoryRepo->getCurrentExperiment($student, $exam);
     }
 
     public function changeAnwser(ExamAnwser $examAnwser)
@@ -110,11 +116,12 @@ class ExamService extends BaseService
             }
             $item->save();
         });
-        $submitTime = getTimeSubmit($examHistory->start_time,$examHistory->exam->working_time);
+        $submitTime = getTimeSubmit($examHistory->start_time, $examHistory->exam->working_time);
         $totalScore = $examHistory->examAnswers()->where('is_correct', true)->sum('score');
         $examHistory->total_score = $totalScore;
         $examHistory->is_submit = true;
         $examHistory->submit_time = $submitTime;
+        $examHistory->status = ExamHistoryStatus::DONE;
         $examHistory->save();
         DB::commit();
         return $examHistory;

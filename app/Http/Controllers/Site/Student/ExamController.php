@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Site\Student;
 
+use App\Enums\ExamHistory\ExamHistoryType;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Student\Exam\ChangeAnswerRequest;
 use App\Http\Resources\Site\Student\ExamHistoryResource;
@@ -62,10 +63,38 @@ class ExamController extends BaseApiController
         }
     }
 
+    public function startExperiment(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->start($exam, $type = ExamHistoryType::EXPERIMENT);
+            return $this->sendResponse(
+                ExamHistoryResource::make($data)
+            );
+        } catch (Exception $e) {
+            return $this->sendError($e->getMessage());
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
     public function getCurrent(Classroom $classroom, Exam $exam)
     {
         try {
             $data = $this->examSer->getCurrent($exam);
+            return $this->sendResponse(
+                $data === null ? null : ExamHistoryResource::make($data)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function getCurrentExperiment(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->getCurrentExperiment($exam);
             return $this->sendResponse(
                 $data === null ? null : ExamHistoryResource::make($data)
             );
