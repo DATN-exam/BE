@@ -36,6 +36,7 @@ class ExamService extends BaseService
 
     public function start(Exam $exam, $type = ExamHistoryType::TEST)
     {
+        $typeQuestion = $type === ExamHistoryType::TEST ? false : true;
         $student = auth('api')->user();
         $current = $this->examHistoryRepo->getCurrentTest($student, $exam);
         if ($current && $type == ExamHistoryType::TEST) {
@@ -49,7 +50,7 @@ class ExamService extends BaseService
             'start_time' => Carbon::now(),
             'type' => $type
         ]);
-        $questions = $this->questionRepo->getQuestionExamRandom($exam)->toArray();
+        $questions = $this->questionRepo->getQuestionExamRandom($exam, $typeQuestion)->toArray();
         $data = [];
         foreach ($questions as $question) {
             $data[] = [

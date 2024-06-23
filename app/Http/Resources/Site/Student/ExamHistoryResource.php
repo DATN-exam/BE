@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Site\Student;
 
+use App\Enums\ExamHistory\ExamHistoryType;
 use App\Http\Resources\Site\Teacher\StudentResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ExamHistoryResource extends JsonResource
             'student' => StudentResource::make($this->whenLoaded('student')),
             'time_taken' => $this->whenHas('time_taken'),
             'show_result' => Carbon::now()->gt($this->exam->end_date) || $this->exam->is_show_result,
-            'total_score' => $this->when(Carbon::now()->gt($this->exam->end_date) || $this->exam->is_show_result, $this->total_score),
+            'total_score' => $this->when(Carbon::now()->gt($this->exam->end_date) || $this->exam->is_show_result || $this->type === ExamHistoryType::EXPERIMENT, $this->total_score),
             'is_submit' => $this->is_submit,
             'student_id' => $this->student_id,
             'start_time' => $this->start_time,

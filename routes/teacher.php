@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Site\Teacher\AnalysisController;
 use App\Http\Controllers\Site\Teacher\Classroom\ClassroomController;
 use App\Http\Controllers\Site\Teacher\Classroom\ClassroomKeyController;
 use App\Http\Controllers\Site\Teacher\Exam\ExamController;
@@ -47,6 +48,7 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
             Route::get('/', [ExamController::class, 'index'])->name('index');
             Route::get('/{exam}/get-top', [ExamController::class, 'getTop'])->name('getTop');
             Route::get('/{exam}/get-top-export', [ExamController::class, 'getTopExport'])->name('getTopExport');
+            Route::get('/{exam}/analysis', [ExamController::class, 'analysis'])->name('analysis');
             Route::post('/{exam}', [ExamController::class, 'update'])->name('update');
             Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
         });
@@ -71,4 +73,9 @@ Route::group(['prefix' => 'set-quetions', 'as' => 'set_quetions.'], function () 
             Route::put('/{question}', [QuestionController::class, 'update'])->name('update');
         });
     });
+});
+
+//Analysis
+Route::group(['prefix' => 'analysis', 'as' => 'analysis.'], function () {
+    Route::get('/', [AnalysisController::class, 'index'])->name('index');
 });
