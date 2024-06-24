@@ -23,6 +23,13 @@ class Exam extends Model
         'number_question_hard',
         'number_question_medium',
         'number_question_easy',
+        'notification_start',
+        'notification_end',
+    ];
+
+    protected $casts = [
+        'notification_start' => 'boolean',
+        'notification_end' => 'boolean',
     ];
 
     public function setQuestion()

@@ -15,4 +15,8 @@ interface ExamRepositoryInterface extends RepositoryInterface
     public function getTop(Exam $exam);
 
     public function analysis(Exam $exam);
+
+    public function getExamsStartNotification();
+
+    public function getExamsEndNotification();
 }
