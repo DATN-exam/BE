@@ -7,6 +7,7 @@ use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
 use App\Http\Requests\Site\Auth\UpdateRequest;
 use App\Http\Resources\Site\StudentResource;
+use App\Services\Admin\Cron\ExamCronService;
 use App\Services\Site\AuthService;
 use App\Services\Site\GoogleAuthService;
 use Illuminate\Http\Request;
@@ -36,11 +37,11 @@ class AuthController extends BaseApiController
 
     public function update(UpdateRequest $rq)
     {
-        $this->authSer->setRequestValidated($rq)->update();
-        return $this->sendResponse([
-            'message' => __('alert.update.success'),
-        ]);
-        try{
+        try {
+            $this->authSer->setRequestValidated($rq)->update();
+            return $this->sendResponse([
+                'message' => __('alert.update.success'),
+            ]);
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();

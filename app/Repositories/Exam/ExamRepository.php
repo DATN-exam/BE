@@ -61,4 +61,24 @@ class ExamRepository extends BaseRepository implements ExamRepositoryInterface
         $totalStudent = $exam->classroom->students()->count();
         return [...$statisis, "total_student" => $totalStudent];
     }
+
+    public function getExamsStartNotification()
+    {
+        $now = now();
+        return $this->model
+            ->where('notification_start', false)
+            ->where('start_date', '<', $now)
+            ->with(['classroom', 'classroom.students'])
+            ->get();
+    }
+
+    public function getExamsEndNotification()
+    {
+        $now = now();
+        return $this->model
+            ->where('notification_end', false)
+            ->where('end_date', '<', $now)
+            ->with(['classroom', 'classroom.students'])
+            ->get();
+    }
 }
