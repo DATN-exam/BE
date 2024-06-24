@@ -30,12 +30,12 @@ class FileService
     public function delete($paths)
     {
         foreach ($paths as $path) {
-            $file = Storage::disk(config('filesystems.default'))->get($path);
-            Storage::disk(config('filesystems.trash'))->put($path, $file);
-            // try {
-            // } catch (Throwable $e) {
-            //     Log::error($e);
-            // }
+            try {
+                $file = Storage::disk(config('filesystems.default'))->get($path);
+                Storage::disk(config('filesystems.trash'))->put($path, $file);
+            } catch (Throwable $e) {
+                Log::error($e);
+            }
         }
         return Storage::disk(config('filesystems.default'))->delete($paths);
     }

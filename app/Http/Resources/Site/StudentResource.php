@@ -25,11 +25,11 @@ class StudentResource extends JsonResource
             'role' => $this->role->name,
             'full_name' => $this->full_name,
             'first_name' => $this->first_name,
+            'avatar' => $this->avatar->url ?? null,
             'last_name' => $this->last_name,
             'dob' => $this->dob,
             'ward_id' => $this->ward_id,
             'address' => $this->address,
-            'avatar' => $this->avatar,
             'description' => $this->description,
             'has_teacher_registration' => $check
         ];

@@ -7,6 +7,7 @@ use App\Enums\Classroom\ClassroomStudentStatus;
 use App\Enums\Question\SetQuestionStatus;
 use App\Enums\User\UserRole;
 use App\Enums\User\UserStatus;
+use App\Models\Image;
 use App\Models\User;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
@@ -77,6 +78,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 return $query->where('status', UserStatus::getValueByKey($filters['status']));
             })
             ->where('role', UserRole::TEACHER)
+            ->with('avatar')
             ->paginate($filters['per_page'] ?? 15);
     }
 
@@ -126,5 +128,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 },
             ])
             ->first();
+    }
+
+    public function saveAvatar(User $user, Image $image)
+    {
+        if ($user->avatar) {
+            $user->avatar->delete();
+        }
+        return $user->avatar()->save($image);
     }
 }

@@ -172,3 +172,22 @@ if (!function_exists('getQuestionHtml')) {
         return $questionHtml;
     }
 }
+
+if (!function_exists('getQuestionWord')) {
+    function getQuestionWord($questionHtml)
+    {
+        $regex = '/<img[^>]*\bdata-key\s*=\s*["\']([^"\']+)[\'"][^>]*>/i';
+        preg_match_all($regex, $questionHtml, $matches);
+        foreach ($matches[0] as $key => $imgTag) {
+            $dataKey = $matches[1][$key];
+            $id = Str::between($dataKey, "{{", "}}");
+            $image = Image::find($id);
+            if (!$image) {
+                continue;
+            }
+            $newImgTag = $image->url;
+            $questionHtml = str_replace($imgTag, $newImgTag, $questionHtml);
+        }
+        return $questionHtml;
+    }
+}

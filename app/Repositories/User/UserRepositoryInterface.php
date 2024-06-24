@@ -2,6 +2,7 @@
 
 namespace App\Repositories\User;
 
+use App\Models\Image;
 use App\Models\User;
 use App\Repositories\RepositoryInterface;
 
@@ -20,4 +21,6 @@ interface UserRepositoryInterface extends RepositoryInterface
     public function exportStudent($filters);
 
     public function analysisTeacher(User $teacher);
+
+    public function saveAvatar(User $user, Image $image);
 }

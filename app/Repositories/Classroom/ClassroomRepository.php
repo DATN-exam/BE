@@ -3,6 +3,7 @@
 namespace App\Repositories\Classroom;
 
 use App\Enums\Classroom\ClassroomStatus;
+use App\Enums\Classroom\ClassroomStudentStatus;
 use App\Models\Classroom;
 use App\Repositories\BaseRepository;
 use Illuminate\Support\Facades\DB;
@@ -54,7 +55,8 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
     {
         return $this->baseList($filters)
             ->whereHas('students', function ($query) use ($studentId) {
-                return $query->where('student_id', $studentId);
+                return $query->where('classroom_students.student_id', $studentId)
+                    ->where('classroom_students.status', ClassroomStudentStatus::ACTIVE);
             })
             ->paginate($filters['per_page'] ?? 10);
     }

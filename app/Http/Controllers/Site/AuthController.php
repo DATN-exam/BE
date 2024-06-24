@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\BaseApiController;
 use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
+use App\Http\Requests\Site\Auth\UpdateRequest;
 use App\Http\Resources\Site\StudentResource;
 use App\Services\Site\AuthService;
 use App\Services\Site\GoogleAuthService;
@@ -30,6 +31,19 @@ class AuthController extends BaseApiController
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function update(UpdateRequest $rq)
+    {
+        $this->authSer->setRequestValidated($rq)->update();
+        return $this->sendResponse([
+            'message' => __('alert.update.success'),
+        ]);
+        try{
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
         }
     }
 

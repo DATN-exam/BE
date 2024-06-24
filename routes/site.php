@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('update', [AuthController::class, 'update'])->name('update');
     Route::post('verify', [AuthController::class, 'verify'])->withoutMiddleware('api')->name('verify');
 
     Route::group(['prefix' => 'google', 'as' => 'google.'], function () {
