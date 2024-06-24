@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Requests\Admin\Auth;
+namespace App\Http\Requests\Site\Auth;
 
+use App\Rules\AgeCheckRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class UpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +23,14 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email', 'exists:users,email', 'min:5', 'max:100'],
-            'password' => ['required', 'min:5', 'max:100'],
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'email.required'=>'Bạn phải nhập email',
-            'email.email'=>'Phải là email',
-            'email.exists'=>'Email không tồn tại',
+            'first_name' => ['string', 'max:100'],
+            'last_name' => ['string', 'max:100'],
+            'dob' => [
+                'date',
+                'date_format:' . config('define.date_format'),
+                new AgeCheckRule('dob', config('define.specified_age'))
+            ],
+            'avatar' => ['max:1024', 'image']
         ];
     }
 }

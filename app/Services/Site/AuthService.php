@@ -4,18 +4,25 @@ namespace App\Services\Site;
 
 use App\Enums\User\UserStatus;
 use App\Events\Site\UserRegisterEvent;
+use App\Models\Image;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BaseService;
+use App\Services\FileService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Arr;
+use Throwable;
 
 class AuthService extends BaseService
 {
-    public function __construct(protected UserRepositoryInterface $userRepo)
-    {
-        //
+    private $path;
+    public function __construct(
+        protected UserRepositoryInterface $userRepo,
+        protected FileService $fileSer
+    ) {
+        $this->path = config('define.path.avatar');
     }
 
     public function login(): array
@@ -117,5 +124,36 @@ class AuthService extends BaseService
             'token_verify' => null,
         ]);
         return true;
+    }
+
+    public function update()
+    {
+        DB::beginTransaction();
+        try {
+            /**
+             * @var User $user
+             */
+            $user = auth('api')->user();
+            if (isset($this->data['avatar'])) {
+                $file = $this->data['avatar'];
+                if ($user->avatar) {
+                    $this->fileSer->delete([$user->avatar->path]);
+                }
+
+                $image = new Image();
+                $newPath = generatePathFile($this->path, $user->id, $file->getClientOriginalExtension());
+                $image->old_name = $file->getClientOriginalName();
+                $image->path = $newPath;
+                $newImage = $this->userRepo->saveAvatar($user, $image);
+                $this->fileSer->save($newImage->path, file_get_contents($file));
+            }
+            $dataUpdate = Arr::except($this->data, ['avatar']);
+            $this->userRepo->update($user, $dataUpdate);
+            DB::commit();
+            return;
+        } catch (Throwable $e) {
+            DB::rollBack();
+            return throw $e;
+        }
     }
 }

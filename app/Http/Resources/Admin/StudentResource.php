@@ -25,7 +25,7 @@ class StudentResource extends JsonResource
             'dob' => $this->dob,
             'ward_id' => $this->ward_id,
             'address' => $this->address,
-            'avatar' => $this->avatar,
+            'avatar' => $this->avatar->url ?? null,
             'description' => $this->description,
         ];
     }

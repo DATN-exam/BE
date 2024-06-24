@@ -70,11 +70,11 @@ class QuestionController extends BaseApiController
 
     public function update(SetQuestion $setQuestion, Question $question, QuestionUpdateRequest $rq)
     {
+        $this->questionService->setRequestValidated($rq)->handleUpdate($question);
+        return $this->sendResponse([
+            'message' => __('alert.update.success'),
+        ]);
         try {
-            $this->questionService->setRequestValidated($rq)->handleUpdate($question);
-            return $this->sendResponse([
-                'message' => __('alert.update.success'),
-            ]);
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();

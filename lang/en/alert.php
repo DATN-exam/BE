@@ -15,37 +15,24 @@ return [
 
     'auth' => [
         'login' => [
-            'success' => 'Login successful',
-            'failed' => 'Failed to login',
-            'blocked' => 'Your account has been locked',
-            'wait_verify' => 'Please verify your account',
+            'success' => 'Đăng nhập thành công',
+            'failed' => 'Đăng nhập thất bại do sai thông tin.',
+            'blocked' => 'Tài khoản của bạn đã bị khóa',
+            'wait_verify' => 'Vui lòng xác nhận email',
         ],
         'logout' => [
-            'success' => 'Logout successful'
+            'success' => 'Đăng xuất thành công'
         ]
     ],
     'teacher' => [
         'register' => [
-            'has_been' => 'Has been registered'
+            'has_been' => 'Bạn đã có đơn đăng kí rồi'
         ]
     ],
-    'bad_request' => 'Bad request',
-    'server_error' => 'Server error',
-    'not_found' => 'Not found',
-    'forbidden' => 'Unauthenticated.',
-    'update_successful' => 'Update successful',
-    'import_successful' => 'Import successful',
-    'moto' => [
-        'images' => [
-            'max' => 'Quantity image than maximum(' . config('define.images.moto.max') . ')',
-        ],
-        'rent' => [
-            'failed' => 'Reset password failed',
-            'has_been_scheduled' => 'Motos has been scheduled.'
-        ]
-    ],
-    'params' => [
-        'invalid' => 'There are some invalid params'
-    ],
-    'order_issue' => 'Have :quantity order issues',
+    'bad_request' => 'Lỗi',
+    'server_error' => 'Lỗi máy chủ',
+    'not_found' => 'Nội dung bạn truy cập không tồn tại',
+    'forbidden' => 'Không có quyền truy cập',
+    'update_successful' => 'Cập nhật thành công',
+    'import_successful' => 'Import thành công',
 ];

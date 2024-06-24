@@ -24,7 +24,7 @@ class ModelBindingServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Route::bind('student', function ($value) {
-            return User::role(UserRole::STUDENT)->findOrFail($value);
+            return User::findOrFail($value);
         });
 
         Route::bind('teacher', function ($value) {
