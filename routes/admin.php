@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AnalysisController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\TeacherRegistrationController;
 use App\Http\Controllers\Admin\StudentController;
@@ -49,5 +50,11 @@ Route::group(['middleware' => ['auth:api', 'admin']], function () {
         Route::post('/{student}/active', [StudentController::class, 'active'])
             ->middleware('can:adminActive,student')
             ->name('active');
+    });
+
+    Route::group(['prefix' => 'analysis', 'as' => 'analysis.'], function () {
+        Route::get('/', [AnalysisController::class, 'index'])->name('index');
+        Route::get('/new-user-monthly', [AnalysisController::class, 'newUserMonthly'])->name('newUserMonthly');
+        Route::get('/new-classroom-monthly', [AnalysisController::class, 'newClassroomMonthly'])->name('newClassroomMonthly');
     });
 });

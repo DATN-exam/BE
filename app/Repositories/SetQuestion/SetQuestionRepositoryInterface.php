@@ -10,4 +10,6 @@ interface SetQuestionRepositoryInterface extends RepositoryInterface
     public function paginateOfTeacher($teacherId, $filters);
 
     public function getSetQuestionReady(User $teacher);
+
+    public function getNumberSetQuestion();
 }

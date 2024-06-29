@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Resources\Site\Student;
+namespace App\Http\Resources\Site\Teacher;
 
 use App\Enums\ExamHistory\ExamHistoryType;
+use App\Http\Resources\Site\Student\ExamAnswerResource;
 use App\Http\Resources\Site\Teacher\StudentResource;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ExamHistoryResource extends JsonResource
+class ExamHistoryResource2 extends JsonResource
 {
     /**
      * Transform the resource into an array.

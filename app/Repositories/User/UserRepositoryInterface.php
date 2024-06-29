@@ -18,9 +18,17 @@ interface UserRepositoryInterface extends RepositoryInterface
 
     public function paginateStudentOfClassroom($filters, $classroom);
 
+    public function exportStudentOfClassroom($filters, $classroom);
+
     public function exportStudent($filters);
 
     public function analysisTeacher(User $teacher);
 
     public function saveAvatar(User $user, Image $image);
+
+    public function analysisAdmin();
+
+    public function getNumberNewUser();
+
+    public function getNumberNewUserMonthly($filters);
 }

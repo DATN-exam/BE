@@ -36,6 +36,7 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
         //Student
         Route::group(['prefix' => '{classroom}/students', 'as' => 'students.'], function () {
             Route::get('/', [StudentController::class, 'index'])->name('index');
+            Route::get('/export', [StudentController::class, 'export'])->name('export');
             Route::group(['middleware' => ['can:classroomManageStudent,classroom,student']], function () {
                 Route::post('/{student}/block', [StudentController::class, 'block'])->name('block');
                 Route::post('/{student}/active', [StudentController::class, 'active'])->name('active');
@@ -51,6 +52,7 @@ Route::group(['prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
             Route::get('/{exam}/analysis', [ExamController::class, 'analysis'])->name('analysis');
             Route::post('/{exam}', [ExamController::class, 'update'])->name('update');
             Route::delete('/{exam}', [ExamController::class, 'destroy'])->name('destroy');
+            Route::get('/{exam}/history/{examHistory}', [ExamController::class, 'getExamHistoryDetail'])->name('getCurrentDetail');
         });
     });
 });

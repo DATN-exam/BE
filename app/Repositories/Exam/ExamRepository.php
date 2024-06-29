@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Exam;
 
+use App\Enums\Exam\ExamStatus;
 use App\Enums\ExamHistory\ExamHistoryType;
 use App\Models\Classroom;
 use App\Models\Exam;
@@ -17,7 +18,24 @@ class ExamRepository extends BaseRepository implements ExamRepositoryInterface
 
     public function getList(Classroom $classroom, $filters)
     {
+        $now = now();
         return $this->model
+            ->when(isset($filters['name']), function ($query) use ($filters) {
+                return $query->where('name', $filters['name']);
+            })
+            ->when(isset($filters['status']), function ($query) use ($filters, $now) {
+                if ($filters['status'] === ExamStatus::HAPPENED->name) {
+                    return $query->where('end_date', '<', $now);
+                }
+                if ($filters['status'] === ExamStatus::UPCOMING->name) {
+                    return $query->where('start_date', '>', $now);
+                }
+                if ($filters['status'] === ExamStatus::HAPPENING->name) {
+                    return $query->where('start_date', '<', $now)
+                        ->where('end_date', '>', $now);
+                }
+                return $query;
+            })
             ->where('classroom_id', $classroom->id)
             ->paginate($filters['per_page'] ?? 15);;
     }
@@ -80,5 +98,10 @@ class ExamRepository extends BaseRepository implements ExamRepositoryInterface
             ->where('end_date', '<', $now)
             ->with(['classroom', 'classroom.students'])
             ->get();
+    }
+
+    public function getNumberExam()
+    {
+        return $this->model->count();
     }
 }

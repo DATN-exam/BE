@@ -144,4 +144,17 @@ class ExamController extends BaseApiController
             return $this->sendError();
         }
     }
+
+    public function getTop(Classroom $classroom, Exam $exam)
+    {
+        try {
+            $data = $this->examSer->getTop($exam);
+            return $this->sendResponse(
+                ExamHistoryResource::collection($data)
+            );
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
 }

@@ -31,19 +31,21 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::group(['middleware' => 'auth:api', 'prefix' => 'classrooms', 'as' => 'classrooms.'], function () {
         Route::get('join/{classroomKey}', [ClassroomController::class, 'join'])->name('join');
         Route::get('/', [ClassroomController::class, 'index'])->name('index');
-        Route::get('/{classroom}', [ClassroomController::class, 'show'])->name('show');
+        Route::get('/{classroom}', [ClassroomController::class, 'show'])
+            ->middleware('can:studentShow,classroom')
+            ->name('show');
 
-        Route::group(['prefix' => '{classroom}/exams', 'as' => 'exams.'], function () {
+        Route::group(['middleware' => ['can:studentShow,classroom'], 'prefix' => '{classroom}/exams', 'as' => 'exams.'], function () {
             Route::get('/', [ExamController::class, 'index'])->name('index');
             Route::get('/{exam}', [ExamController::class, 'show'])->name('show');
             Route::post('/{exam}/start', [ExamController::class, 'start'])->name('start');
             Route::get('/{exam}/get-current', [ExamController::class, 'getCurrent'])->name('getCurrent');
             Route::get('/{exam}/history/{examHistory}', [ExamController::class, 'getExamHistoryDetail'])->name('getCurrentDetail');
+            Route::get('/{exam}/get-top', [ExamController::class, 'getTop'])->name('getTop');
 
             //Exam experiment
             Route::get('/{exam}/get-current-experiment', [ExamController::class, 'getCurrentExperiment'])->name('getCurrentExperiment');
             Route::post('/{exam}/start-experiment', [ExamController::class, 'startExperiment'])->name('startExperiment');
-
         });
     });
     Route::group(['prefix' => 'exams', 'as' => 'exams.'], function () {
