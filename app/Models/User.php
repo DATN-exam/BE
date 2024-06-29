@@ -40,7 +40,8 @@ class User extends Authenticatable implements JWTSubject
         'address',
         'avatar',
         'description',
-        'token_verify'
+        'token_verify',
+        'email_forgot_at'
     ];
 
     protected function fullName(): Attribute

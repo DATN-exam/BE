@@ -6,14 +6,19 @@ use App\Enums\User\UserStatus;
 use App\Events\Site\UserRegisterEvent;
 use App\Models\Image;
 use App\Models\User;
+use App\Notifications\Auth\ForgotPassNotification;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BaseService;
 use App\Services\FileService;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Throwable;
+use Tymon\JWTAuth\Token;
 
 class AuthService extends BaseService
 {
@@ -154,6 +159,46 @@ class AuthService extends BaseService
         } catch (Throwable $e) {
             DB::rollBack();
             return throw $e;
+        }
+    }
+
+    public function forgotPass()
+    {
+        $now = Carbon::now();
+        $user = User::where('email', $this->data['email'])->first();
+
+        if ($user->status !== UserStatus::ACTIVE) {
+            throw new \Exception('Tài khoản của bạn đã bị khóa');
+        }
+
+        if ($user->email_forgot_at > Carbon::now()->subMinute(120)) {
+            throw new \Exception('Mỗi 120 phút bạn mới có thể yêu cầu đặt lại mật khẩu 1 lần');
+        }
+        $token = JWTAuth::customClaims([
+            'exp' => Carbon::now()->addMinutes(120)->timestamp
+        ])->fromUser($user);
+        $user->email_forgot_at = $now;
+        $user->save();
+        Notification::send($user, new ForgotPassNotification($token));
+        return;
+    }
+
+    public function confirmForgotPass()
+    {
+        $token = $this->data['token'];
+        try {
+            JWTAuth::setToken($token);
+            if (!JWTAuth::check()) {
+                return throw new \Exception('Token không hợp lệ');
+            }
+            $data = JWTAuth::getJWTProvider()->decode($token);
+            $user = User::find($data['sub']);
+            $user->password = Hash::make($this->data['new_password']);
+            JWTAuth::invalidate(true);
+            $user->save();
+            return;
+        } catch (Throwable $e) {
+            return throw new \Exception('Token không hợp lệ');
         }
     }
 }

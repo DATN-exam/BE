@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\BaseApiController;
+use App\Http\Requests\Site\Auth\ConfirmForgotPassRequest;
+use App\Http\Requests\Site\Auth\ForgotPassRequest;
 use App\Http\Requests\Site\Auth\LoginRequest;
 use App\Http\Requests\Site\Auth\RegisterRequest;
 use App\Http\Requests\Site\Auth\UpdateRequest;
@@ -114,6 +116,32 @@ class AuthController extends BaseApiController
         try {
             $data = $this->googleAuthSer->setRequest($rq)->loginCallback();
             return $this->sendResponse($data);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function forgotPass(ForgotPassRequest $rq)
+    {
+        try {
+            $this->authSer->setRequestValidated($rq)->forgotPass();
+            return $this->sendResponse([
+                'message' => 'Vui lòng kiểm tra email để đặt lại mật khẩu',
+            ]);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function confirmForgotPass(ConfirmForgotPassRequest $rq)
+    {
+        try {
+            $this->authSer->setRequestValidated($rq)->confirmForgotPass();
+            return $this->sendResponse([
+                'message' => 'Bạn đã đặt lại mật khẩu thành công',
+            ]);
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError($e->getMessage(), Response::HTTP_UNAUTHORIZED);
