@@ -17,8 +17,8 @@ class AnalysisController extends BaseApiController
 
     public function index()
     {
+        $data = $this->analysisSer->analysis();
         try {
-            $data = $this->analysisSer->analysis();
             return $this->sendResponse(AnalysisResource::make($data->toArray()));
         } catch (Throwable $e) {
             Log::error($e);
