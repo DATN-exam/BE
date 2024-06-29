@@ -138,16 +138,16 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function analysisTeacher(User $teacher)
     {
         return $this->model->where('id', $teacher->id)
-            ->with(['classrooms' => function ($query) {
-                return $query->select('classrooms.id', 'classrooms.name')->withCount('students');
+            ->with(['myClassrooms' => function ($query) {
+                return $query->select('classrooms.id', 'classrooms.name','classrooms.teacher_id')->withCount('students');
             }])
             ->with(['setQuestion' => function ($query) {
                 return $query->select('set_questions.id', 'set_questions.title', 'set_questions.teacher_id')->withCount('questions');
             }])
             ->withCount([
-                'classrooms',
+                'myClassrooms',
                 'setQuestion',
-                'classrooms as classroom_active_count' => function ($query) {
+                'myClassrooms as classroom_active_count' => function ($query) {
                     $query->where('classrooms.status', ClassroomStatus::ACTIVE);
                 },
                 'setQuestion as set_question_active_count' => function ($query) {
