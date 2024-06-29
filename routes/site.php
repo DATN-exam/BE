@@ -11,6 +11,8 @@ Route::group(['prefix' => 'auth', 'as' => 'auth.'], function () {
     Route::post('register', [AuthController::class, 'register'])->name('register');
     Route::post('update', [AuthController::class, 'update'])->name('update');
     Route::post('verify', [AuthController::class, 'verify'])->withoutMiddleware('api')->name('verify');
+    Route::post('forgot-pass', [AuthController::class, 'forgotPass'])->withoutMiddleware('api')->name('forgotPass');
+    Route::post('confirm-forgot-pass', [AuthController::class, 'confirmForgotPass'])->withoutMiddleware('api')->name('confirmForgotPass');
 
     Route::group(['prefix' => 'google', 'as' => 'google.'], function () {
         Route::get('url', [AuthController::class, 'getLoginGoogleUrl'])->name('url');
