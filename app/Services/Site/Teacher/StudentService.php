@@ -8,12 +8,14 @@ use App\Models\User;
 use App\Repositories\Classroom\ClassroomStudentRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BaseService;
+use App\Services\ExcelService;
 
 class StudentService extends BaseService
 {
     public function __construct(
         protected UserRepositoryInterface $studentRepo,
-        protected ClassroomStudentRepositoryInterface $classroomStudentRepo
+        protected ClassroomStudentRepositoryInterface $classroomStudentRepo,
+        protected ExcelService $excelSer
     ) {
         //
     }
@@ -21,6 +23,12 @@ class StudentService extends BaseService
     public function paginate(Classroom $classroom)
     {
         return $this->studentRepo->paginateStudentOfClassroom($this->data, $classroom);
+    }
+
+    public function export(Classroom $classroom)
+    {
+        $students = $this->studentRepo->exportStudentOfClassroom($this->data, $classroom);
+        return $this->excelSer->teacherExportStudent($students);
     }
 
     public function block(Classroom $classroom, User $student)

@@ -31,6 +31,17 @@ class StudentController extends BaseApiController
         }
     }
 
+    public function export(Classroom $classroom, Request $rq)
+    {
+        $students = $this->studentSer->setRequest($rq)->export($classroom);
+        return $this->sendCsvResponse($students, 'students.xlsx');
+        try {
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
     public function block(Classroom $classroom, User $student)
     {
         try {

@@ -127,4 +127,9 @@ class ExamService extends BaseService
         DB::commit();
         return $examHistory;
     }
+
+    public function getTop(Exam $exam)
+    {
+        return $this->examRepo->getTop($exam);
+    }
 }

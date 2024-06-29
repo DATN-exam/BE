@@ -19,4 +19,6 @@ interface ExamRepositoryInterface extends RepositoryInterface
     public function getExamsStartNotification();
 
     public function getExamsEndNotification();
+
+    public function getNumberExam();
 }

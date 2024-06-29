@@ -66,4 +66,9 @@ class SetQuestionRepository extends BaseRepository implements SetQuestionReposit
             ->orHaving('question_easy_count', '>', 1)
             ->get();
     }
+
+    public function getNumberSetQuestion()
+    {
+        return $this->model->count();
+    }
 }

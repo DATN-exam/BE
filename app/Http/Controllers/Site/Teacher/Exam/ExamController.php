@@ -8,6 +8,7 @@ use App\Http\Resources\Site\Teacher\ExamHistoryResource;
 use App\Http\Resources\Site\Teacher\ExamResource;
 use App\Models\Classroom;
 use App\Models\Exam;
+use App\Models\ExamHistory;
 use App\Services\Site\Teacher\Exam\ExamService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -101,6 +102,19 @@ class ExamController extends BaseApiController
         try {
             $data = $this->examSer->analysis($exam);
             return $this->sendResponse($data);
+        } catch (Throwable $e) {
+            Log::error($e);
+            return $this->sendError();
+        }
+    }
+
+    public function getExamHistoryDetail(Classroom $classroom, Exam $exam, ExamHistory $examHistory)
+    {
+        try {
+            $examHistory->load(['exam', 'student', 'examAnswers', 'examAnswers.question', 'examAnswers.question.answers', 'exam.setQuestion']);
+            return $this->sendResponse(
+                ExamHistoryResource::make($examHistory)
+            );
         } catch (Throwable $e) {
             Log::error($e);
             return $this->sendError();

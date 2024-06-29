@@ -26,6 +26,7 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $createdAt = fake()->dateTimeBetween('-2 years');
         return [
             'email' => fake()->unique()->safeEmail(),
             'status' => Arr::random([UserStatus::ACTIVE, UserStatus::ADMIN_BLOCK]),
@@ -36,6 +37,8 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'description' => fake()->text(150),
             'password' => static::$password ??= Hash::make('password'),
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ];
     }
 

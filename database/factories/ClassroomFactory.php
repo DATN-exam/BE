@@ -17,11 +17,15 @@ class ClassroomFactory extends Factory
      */
     public function definition(): array
     {
+        $createdAt = fake()->dateTimeBetween('-2 years');
+
         return [
             'name' => fake()->firstName(10),
             'teacher_id' => 2,
             'status' => ClassroomStatus::ACTIVE,
             'description' => fake()->text(100),
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ];
     }
 }

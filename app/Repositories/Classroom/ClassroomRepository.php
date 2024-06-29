@@ -6,6 +6,7 @@ use App\Enums\Classroom\ClassroomStatus;
 use App\Enums\Classroom\ClassroomStudentStatus;
 use App\Models\Classroom;
 use App\Repositories\BaseRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ClassroomRepository extends BaseRepository implements ClassroomRepositoryInterface
@@ -59,5 +60,38 @@ class ClassroomRepository extends BaseRepository implements ClassroomRepositoryI
                     ->where('classroom_students.status', ClassroomStudentStatus::ACTIVE);
             })
             ->paginate($filters['per_page'] ?? 10);
+    }
+
+    public function getNumberClassroomMonthly($filters)
+    {
+        $defaultData = [];
+        $year = $filters['year'] ?? Carbon::now()->year;
+        for ($month = 1; $month <= 12; $month++) {
+            $defaultData[Carbon::create($year, $month, 1)->format('Y-m')] = [
+                "month" => Carbon::create($year, $month, 1)->format('Y-m'),
+                "number_classroom" => 0
+            ];
+        }
+        $data = $this->model
+            ->selectRaw(DB::raw(
+                'DATE_FORMAT(created_at,"%Y-%m") AS month, 
+                COUNT(id) as number_classroom'
+            ))
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->get()
+            ->toArray();
+        foreach ($data as $item) {
+            $defaultData[$item['month']] = [
+                "month" => $item["month"],
+                "number_classroom" => $item["number_classroom"]
+            ];
+        }
+        return array_values($defaultData);
+    }
+
+    public function getNumberClassroom()
+    {
+        return $this->model->count();
     }
 }
