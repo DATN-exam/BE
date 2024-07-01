@@ -35,10 +35,10 @@ class UserRegisteNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('You just created an account')
-            ->line('Please verify by clicking on the following link')
+            ->line('Bạn vừa mới tạo 1 tài khoản')
+            ->line('Vui lòng click link sau để xác nhận tài khoản')
             ->action('Verify', $this->linkVerify)
-            ->line('Thank you!');
+            ->line('Mãi iu!');
     }
 
     /**

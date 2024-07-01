@@ -56,13 +56,13 @@ class ConfirmTeacherNotification extends Notification implements ShouldQueue
     private function mailAccept()
     {
         return (new MailMessage)
-            ->line('accept');
+            ->line('Tài khoản của bạn đã được duyệt thành giáo viên');
     }
 
     private function mailDeny()
     {
         return (new MailMessage)
-            ->line('deny');
+            ->line('Tài khoản của bạn đã bị từ chối đơn trở thành giáo viên');
     }
 
     /**

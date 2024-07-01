@@ -37,6 +37,9 @@ class ExamController extends BaseApiController
     public function update(Classroom $classroom, Exam $exam, ExamRequest $rq)
     {
         try {
+            if ($exam->examHistories()->count() > 0) {
+                return $this->sendError('Cuộc thi đã có người thi nên không thể sửa đổi');
+            }
             $this->examSer->setRequestValidated($rq)->update($exam);
             return $this->sendResponse([
                 'message' => __('alert.update.success'),
