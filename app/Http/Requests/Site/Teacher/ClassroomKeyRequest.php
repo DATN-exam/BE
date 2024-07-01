@@ -37,4 +37,11 @@ class ClassroomKeyRequest extends FormRequest
             ],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'expired.after_or_equal'=>['Ngày phải lớn hơn ngày hiện tại']
+        ];
+    }
 }
